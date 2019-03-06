@@ -69,7 +69,7 @@ public class GenerateLog {
 	 public static void writeLog(int rPeerId, int pieceIndex,String Messagetype) {   // Received Have message
 	        logger.info(": Peer " + peerId + Messagetype + rPeerId + " for the piece " + pieceIndex + "\n");
 	    }
-	public static void writeLog(String MessageType) {
+	public static void writeLog(String MessageType) {  //Download Complete message
 		  logger.info(": Peer " + peerId + MessageType);
 	}
 }
