@@ -72,29 +72,4 @@ public class GenerateLog {
 	public static void writeLog(String MessageType) {
 		  logger.info(": Peer " + peerId + MessageType);
 	}
-	public static void main(String[] args) {
-		try {
-			GenerateLog log = new GenerateLog(1001);
-			log.writeLog(1002,Constants.LOG_TCP_CREATE_CONNECTION);
-			log.writeLog(1002,Constants.LOG_TCP_RECEIVE_CONNECTION);
-			log.writeLog(1002,Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
-			log.writeLog(1003,Constants.LOG_CHOKING);
-			log.writeLog(1003,Constants.LOG_UNCHOKING);
-			log.writeLog(1004,Constants.LOG_RECEIVE_INTERESTED_MESSAGE);
-			log.writeLog(1005,Constants.LOG_RECEIVE_NOT_INTERESTED_MESSAGE);
-			ArrayList<Integer> preferredNeighbors = new ArrayList<>(Arrays.asList(1001, 1002, 1004, 1005));
-			log.writeLog(preferredNeighbors, Constants.LOG_CHANGE_OF_PREFERREDNEIGHBORS);
-			log.writeLog(1004, 5, 6, Constants.LOG_DOWNLOAD_PEICE);
-			log.writeLog(1003, 4, Constants.LOG_RECEIVE_HAVE_MESSAGE);
-			log.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
-			
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 }
