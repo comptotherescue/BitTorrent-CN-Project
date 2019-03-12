@@ -1,3 +1,4 @@
+package Common;
 
 public class Constants {
 	//Log messages

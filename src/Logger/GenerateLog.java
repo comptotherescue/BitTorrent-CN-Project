@@ -1,11 +1,13 @@
+package Logger;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
+import Common.Constants;
 public class GenerateLog {
 	public static int peerId;
 	public static Logger logger;
