@@ -13,4 +13,9 @@ public class Constants {
  public static String LOG_RECEIVE_NOT_INTERESTED_MESSAGE                 = " received the ‘not interested’message from ";
  public static String LOG_DOWNLOAD_PEICE                                 = " has downloaded the piece ";
  public static String LOG_DOWNLOAD_COMPLETE                              = " has downloaded the complete file \n";
+ 
+ //Message types
+ public static enum Type {CHOKE, UNCHOKE, INTERESTED, NOTINTERESTED, HAVE, BITFIELD, REQUEST, PIECE, HANDSHAKE;}
+
+	
 }
