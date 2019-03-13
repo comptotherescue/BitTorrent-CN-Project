@@ -26,7 +26,7 @@ public class PeerInfo {
 	        try {
 	            loadPeerInfoConfig(peerInfoConfigFile);
 	            for(Map.Entry<Integer, Peer> entry : peerMap.entrySet()) {
-	                entry.getValue().setNeighborMap(new LinkedHashMap<>(peerMap));
+	            //    entry.getValue().setNeighborMap(new LinkedHashMap<>(peerMap));
 	            }
 	        } catch (Exception e) {
 	            System.out.println("Error initializing PeerInfoConfig");
