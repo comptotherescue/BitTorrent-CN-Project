@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import Common.Constants;
+//Aditya
 public class GenerateLog {
 	public static int peerId;
 	public static Logger logger;
