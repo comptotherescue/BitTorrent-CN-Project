@@ -6,6 +6,7 @@ package Common;
 import java.io.*;
 import java.net.Socket;
 
+import Message.ManageMessages;
 import Peer.Peer;
 
 /**
@@ -32,7 +33,7 @@ public class Client {
 	            MessageController messageController = new MessageController(socket, peer, outputStream);
 	            Thread thread = new Thread(messageController);
 	            thread.start();
-	            byte[] message = Message.getMessage(peer.getId());
+	            byte[] message = Handshake.getMessage(peer.getId());
 	            peer.send(outputStream, message);
 	        } catch(IOException ioException) {
 	            System.out.println("IOException while connecting to server " + remotePeer.getId());
