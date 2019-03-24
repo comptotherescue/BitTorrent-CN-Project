@@ -17,5 +17,11 @@ public class Constants {
  //Message types
  public static enum Type {CHOKE, UNCHOKE, INTERESTED, NOTINTERESTED, HAVE, BITFIELD, REQUEST, PIECE, HANDSHAKE;}
 
-	
+ //Constants for config file
+ public static String FileName                                           = "FileName";
+ public static String NumofPreferredNeighbors                            = "NumberOfPreferredNeighbors";
+ public static String UnchokingInterval                                  = "UnchokingInterval";
+ public static String OptimUnchokingInterval                             = "OptimisticUnchokingInterval";
+ public static String FileSize                                           = "FileSize";
+ public static String PieceSize                                          = "PieceSize";
 }

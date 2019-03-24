@@ -1,14 +1,8 @@
-/**
- * 
- */
 package Config;
 import java.io.*;
 import java.util.*;
 import Peer.Peer;
-/**
- * @author sonal
- *
- */
+
 public class PeerInfo {
 
 	  private Map<Integer, Peer> peerMap;

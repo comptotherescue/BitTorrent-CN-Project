@@ -1,124 +1,85 @@
-/**
- * 
- */
+
 package Config;
 
 import java.io.*;
+import java.io.File;
+import java.util.Properties;
+
 import Common.*;
-
-/**
- * @author sonal
- *
- */
 public class CommonInfo {
-	  private int numberOfPreferredNeighbors;
-	  private float unchokingInterval;
-	  private float optimisticUnchokingInterval;
-	  private String sharedFileName;
-	  private long sharedFileSize;
-	  private int sharedFilePieceSize;
+	  private static int numberOfPreferredNeighbors;
+	  private static float unchokingInterval;
+	  private static float optimisticUnchokingInterval;
+	  private static String sharedFileName;
+	  private static long sharedFileSize;
+	  private static int sharedFilePieceSize;
 
-	    public int getNumberOfPreferredNeighbors() {
+	    public static int getNumberOfPreferredNeighbors() {
 	        return numberOfPreferredNeighbors;
 	    }
 
-	    public void setNumberOfPreferredNeighbors(int numberOfPreferredNeighbors) {
-	        this.numberOfPreferredNeighbors = numberOfPreferredNeighbors;
+	    public static void setNumberOfPreferredNeighbors(int a_numberOfPreferredNeighbors) {
+	        numberOfPreferredNeighbors = a_numberOfPreferredNeighbors;
 	    }
 
-	    public float getUnchokingInterval() {
+	    public static float getUnchokingInterval() {
 	        return unchokingInterval;
 	    }
 
-	    public void setUnchokingInterval(float unchokingInterval) {
-	        this.unchokingInterval = unchokingInterval;
+	    public static void setUnchokingInterval(float a_unchokingInterval) {
+	        unchokingInterval = a_unchokingInterval;
 	    }
 
-	    public float getOptimisticUnchokingInterval() {
+	    public static float getOptimisticUnchokingInterval() {
 	        return optimisticUnchokingInterval;
 	    }
 
-	    public void setOptimisticUnchokingInterval(float optimisticUnchokingInterval) {
-	        this.optimisticUnchokingInterval = optimisticUnchokingInterval;
+	    public static void setOptimisticUnchokingInterval(float a_optimisticUnchokingInterval) {
+	        optimisticUnchokingInterval = a_optimisticUnchokingInterval;
 	    }
 
-	    public String getSharedFileName() {
+	    public static String getSharedFileName() {
 	        return sharedFileName;
 	    }
 
-	    public void setSharedFileName(String sharedFileName) {
-	        this.sharedFileName = sharedFileName;
+	    public static void setSharedFileName(String a_sharedFileName) {
+	         sharedFileName = a_sharedFileName;
 	    }
 
-	    public long getSharedFileSize() {
+	    public static long getSharedFileSize() {
 	        return sharedFileSize;
 	    }
 
-	    public void setSharedFileSize(long sharedFileSize) {
-	        this.sharedFileSize = sharedFileSize;
+	    public static void setSharedFileSize(long a_sharedFileSize) {
+	        sharedFileSize = a_sharedFileSize;
 	    }
 
-	    public int getSharedFilePieceSize() {
+	    public static int getSharedFilePieceSize() {
 	        return sharedFilePieceSize;
 	    }
 
-	    public void setSharedFilePieceSize(int sharedFilePieceSize) {
-	        this.sharedFilePieceSize = sharedFilePieceSize;
+	    public static void setSharedFilePieceSize(int a_sharedFilePieceSize) {
+	        sharedFilePieceSize = a_sharedFilePieceSize;
 	    }
-	    public CommonInfo(String configFile) {
-			// TODO Auto-generated constructor stub
-	    	 try {
-		            loadCommonConfig(configFile);
-		        } catch (Exception e) {
-		            System.out.println("Error initializing CommonConfig");
-		            e.printStackTrace();
-		        }
-		}
 
 	   
-	    public void loadCommonConfig(String configFile) { //TODO: Handle this
-	        BufferedReader bufferedReader = null;
-	        try {
-	            bufferedReader = new BufferedReader(new FileReader(configFile));
-	        } catch (FileNotFoundException fileNotFoundException) {
-	            System.out.println("Could not find config file " + configFile);
-	            fileNotFoundException.printStackTrace();
-	        }
-	        if(bufferedReader != null) {
-	            String line = "";
-	            try {
-	                while((line = bufferedReader.readLine()) != null) {
-	                    String[] tokens = line.trim().split("\\s+");
-	                    switch (tokens[0]) {
-	                        case "NumberOfPreferredNeighbors":
-	                            setNumberOfPreferredNeighbors(Integer.parseInt(tokens[1]));
-	                            break;
-	                        case "UnchokingInterval":
-	                            setUnchokingInterval(Float.parseFloat(tokens[1]));
-	                            break;
-	                        case "OptimisticUnchokingInterval":
-	                            setOptimisticUnchokingInterval(Float.parseFloat(tokens[1]));
-	                            break;
-	                        case "FileName":
-	                            setSharedFileName(tokens[1]);
-	                            break;
-	                        case "FileSize":
-	                            setSharedFileSize(Long.parseLong(tokens[1]));
-	                            break;
-	                        case "PieceSize":
-	                            setSharedFilePieceSize(Integer.parseInt(tokens[1]));
-	                            break;
-	                        default:
-	                            throw new ConfigurationException(configFile);
-	                    }
-	                }
-	            } catch (IOException ioException) {
-	                System.out.println("IOException while reading config file " + configFile);
-	                ioException.printStackTrace();
-	            } catch (ConfigurationException configException) {
-	                System.out.println("ConfigException while reading config file " + configFile);
-	                configException.printStackTrace();
-	            }
-	        }
+	    public static void loadCommonConfig() { //TODO: Handle this
+	    	Properties properties = new Properties();
+	    	try {
+				FileInputStream fin = new FileInputStream(System.getProperty("user.dir") + File.separatorChar+ "src/Resources/Common.cfg");
+				properties.load(fin);
+				setSharedFileName(properties.getProperty(Constants.FileName));
+				setSharedFileSize(Integer.parseInt(properties.getProperty(Constants.FileSize)));
+				setSharedFilePieceSize(Integer.parseInt(properties.getProperty(Constants.PieceSize)));
+				setOptimisticUnchokingInterval(Float.parseFloat(properties.getProperty(Constants.OptimUnchokingInterval)));
+				setUnchokingInterval(Float.parseFloat(properties.getProperty(Constants.UnchokingInterval)));
+				setNumberOfPreferredNeighbors(Integer.parseInt(properties.get(Constants.NumofPreferredNeighbors).toString()));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
 }

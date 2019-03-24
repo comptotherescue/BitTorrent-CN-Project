@@ -1,33 +1,24 @@
 
-/**
- * 
- */
 package Peer;
+import Config.*;
 import java.util.List;
 
 import Common.Server;
 
 import Common.Client;
 import Config.PeerInfo;
-/**
- * @author sonal
- *
- */
+
 public class PeerProcess {
-
-	/**
-	 * @param args
-	 */
+	private static int Pid;
 	public static void main(String[] args) {
-		   if(args.length < 1) {
-	            System.out.println("Usage: java peerProcess <peerId>");
-	            return;
-	        }
-	        int peerId = Integer.parseInt(args[0]);
-	        PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
-	        Peer peer = peerInfo.getPeer(peerId);
+		    Pid = 1100;
+	        //Pid = Integer.parseInt(args[0]);
+	        CommonInfo info = new CommonInfo();
+	        info.loadCommonConfig();
+	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
+	        //Peer peer = peerInfo.getPeer(Pid);
 
-	        //Start connection listener
+	      /*  //Start connection listener
 	        Server server = new Server(peer);
 	        Thread serverThread = new Thread(server);
 	        serverThread.start();
@@ -35,12 +26,12 @@ public class PeerProcess {
 	        List<Peer> peers = peerInfo.getAllPeers();
 
 	        for(Peer neighbor : peers) {
-	            if(neighbor.getId() != peerId) {
-	                System.out.println("Opening connection between " + neighbor.getId() + " and " + peerId);
+	            if(neighbor.getId() != Pid) {
+	                System.out.println("Opening connection between " + neighbor.getId() + " and " + Pid);
 	                Client client = new Client(peer, neighbor);
 	                client.connect();
 	            }
-	        }
+	        }*/
 	}
 
 }
