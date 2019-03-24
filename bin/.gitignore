@@ -1,2 +1,8 @@
 /Peer/
+<<<<<<< HEAD
 /Config/
+=======
+/Logger/
+/Message/
+>>>>>>> branch 'master' of https://github.com/comptotherescue/BitTorrent-CN-Project.git
+/Common/

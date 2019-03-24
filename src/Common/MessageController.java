@@ -13,16 +13,22 @@ import Peer.Peer;
  *
  */
 public class MessageController implements Runnable {
+	private Socket socket;
+    private Peer peer;
+    private ObjectOutputStream outputStream;
+    private int remotePeerId;
 
+    public MessageController(Socket socket, Peer peer, ObjectOutputStream outputStream) {
+        this.socket = socket;
+        this.peer = peer;
+        this.outputStream = outputStream;
+    }
 	/**
 	 * @param outputStream 
 	 * @param peer 
 	 * @param socket 
 	 * 
 	 */
-	public MessageController(Socket socket, Peer peer, ObjectOutputStream outputStream) {
-		// TODO Auto-generated constructor stub
-	}
 	  public void run() {
 		  
 	  }
