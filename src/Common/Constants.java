@@ -1,5 +1,7 @@
 package Common;
 
+import java.io.File;
+
 public class Constants {
 	//Log messages
  public static String LOG_TCP_CREATE_CONNECTION                          = " makes a connection to Peer ";
@@ -24,4 +26,7 @@ public class Constants {
  public static String OptimUnchokingInterval                             = "OptimisticUnchokingInterval";
  public static String FileSize                                           = "FileSize";
  public static String PieceSize                                          = "PieceSize";
+ public static String ConfigPath                                         = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/Common.cfg";
+ public static String PeerInfoPath                                       = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/PeerInfo.cfg";
+
 }

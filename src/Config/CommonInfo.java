@@ -66,7 +66,7 @@ public class CommonInfo {
 	    public static void loadCommonConfig() { //TODO: Handle this
 	    	Properties properties = new Properties();
 	    	try {
-				FileInputStream fin = new FileInputStream(System.getProperty("user.dir") + File.separatorChar+ "src/Resources/Common.cfg");
+				FileInputStream fin = new FileInputStream(Constants.ConfigPath);
 				properties.load(fin);
 				setSharedFileName(properties.getProperty(Constants.FileName));
 				setSharedFileSize(Integer.parseInt(properties.getProperty(Constants.FileSize)));

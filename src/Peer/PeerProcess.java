@@ -6,6 +6,7 @@ import java.util.List;
 import Common.Server;
 
 import Common.Client;
+import Common.Constants;
 import Config.PeerInfo;
 
 public class PeerProcess {
@@ -15,6 +16,7 @@ public class PeerProcess {
 	        //Pid = Integer.parseInt(args[0]);
 	        CommonInfo info = new CommonInfo();
 	        info.loadCommonConfig();
+	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 

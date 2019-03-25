@@ -44,6 +44,7 @@ public class Peer {
         this.sockets = new ArrayList<>();
         this.neighborMap = new HashMap<>();
         this.commonInfo = new CommonInfo();
+        this.commonInfo.loadCommonConfig();
         this.file = new File(this.commonInfo, hasFile);
         this.availableFilePieces = new boolean[this.file.getNumberOfPieces()];
         Arrays.fill(availableFilePieces, hasFile);

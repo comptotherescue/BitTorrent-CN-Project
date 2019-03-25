@@ -21,6 +21,7 @@ public class File {
         int pieceSize = commonInfo.getSharedFilePieceSize();
         this.numberOfPieces = (int) Math.ceil((double) fileSize / (double) pieceSize);
         pieces = new Piece[this.numberOfPieces];
+        String dir = System.getProperty("user.dir") ;
         if(hasFile) {
             String fileName = commonInfo.getSharedFileName();
             try {
