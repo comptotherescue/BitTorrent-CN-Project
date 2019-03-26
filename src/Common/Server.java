@@ -39,7 +39,7 @@ public class Server implements Runnable{
 	                MessageController messageController = new MessageController(socket, peer, outputStream);
 	                Thread thread = new Thread(messageController);
 	                thread.start();
-	                byte[] message = Handshake.getMessage(peer.getId());
+	                byte[] message = Handshake.getMessage();
 	                System.out.println("Sending message " + new String(message));
 	                peer.send(outputStream, message);
 	            }

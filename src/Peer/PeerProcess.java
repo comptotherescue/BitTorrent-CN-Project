@@ -7,6 +7,7 @@ import Common.Server;
 
 import Common.Client;
 import Common.Constants;
+import Common.Handshake;
 import Config.PeerInfo;
 
 public class PeerProcess {
@@ -17,6 +18,7 @@ public class PeerProcess {
 	        CommonInfo info = new CommonInfo();
 	        info.loadCommonConfig();
 	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);
+	        Handshake.setID(Pid);
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 
