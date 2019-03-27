@@ -20,13 +20,14 @@ public class Constants {
  public static enum Type {CHOKE, UNCHOKE, INTERESTED, NOTINTERESTED, HAVE, BITFIELD, REQUEST, PIECE, HANDSHAKE;}
 
  //Constants for config file
- public static String FileName                                           = "FileName";
- public static String NumofPreferredNeighbors                            = "NumberOfPreferredNeighbors";
- public static String UnchokingInterval                                  = "UnchokingInterval";
- public static String OptimUnchokingInterval                             = "OptimisticUnchokingInterval";
- public static String FileSize                                           = "FileSize";
- public static String PieceSize                                          = "PieceSize";
- public static String ConfigPath                                         = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/Common.cfg";
- public static String PeerInfoPath                                       = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/PeerInfo.cfg";
-
+ public static String FileName                                                 = "FileName";
+ public static String NumofPreferredNeighbors                                  = "NumberOfPreferredNeighbors";
+ public static String UnchokingInterval                                        = "UnchokingInterval";
+ public static String OptimUnchokingInterval                                   = "OptimisticUnchokingInterval";
+ public static String FileSize                                                 = "FileSize";
+ public static String PieceSize                                                = "PieceSize";
+ public static final String ConfigPath                                         = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/Common.cfg";
+ public static final String PeerInfoPath                                       = System.getProperty("user.dir") + File.separatorChar+ "src/Resources/PeerInfo.cfg";
+ public static final String COMMON_PROPERTIES_CREATED_FILE_PATH                = System.getProperty("user.dir") + File.separatorChar + "/project/peer_";
+ public static final String COMMON_PROPERTIES_FILE_PATH                        = System.getProperty("user.dir") + File.separatorChar + "src/Resources/"; 
 }

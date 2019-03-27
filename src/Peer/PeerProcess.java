@@ -12,6 +12,9 @@ import Config.PeerInfo;
 
 public class PeerProcess {
 	private static int Pid;
+	public static int getId() {
+		return Pid;
+	}
 	public static void main(String[] args) {
 		    Pid = 1100;
 	        //Pid = Integer.parseInt(args[0]);

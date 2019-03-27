@@ -13,6 +13,7 @@ public class CommonInfo {
 	  private static String sharedFileName;
 	  private static long sharedFileSize;
 	  private static int sharedFilePieceSize;
+	  private static int numberofFilePieces;
 
 	    public static int getNumberOfPreferredNeighbors() {
 	        return numberOfPreferredNeighbors;
@@ -62,7 +63,16 @@ public class CommonInfo {
 	        sharedFilePieceSize = a_sharedFilePieceSize;
 	    }
 
-	   
+	    public static int getNumberOfPieces() {
+			return numberofFilePieces;
+		}
+	    
+	    public static void calculateNumberOfPieces() {
+	    	numberofFilePieces = (int) (sharedFileSize % sharedFilePieceSize) == 0 ? (int) (sharedFileSize / sharedFilePieceSize)
+					: (int) (sharedFileSize / sharedFilePieceSize) + 1;
+			System.out.println("CommonProperties.calculateNumberOfPieces - Number of pieces: " + numberofFilePieces);
+		}
+	    
 	    public static void loadCommonConfig() { //TODO: Handle this
 	    	Properties properties = new Properties();
 	    	try {
@@ -74,7 +84,8 @@ public class CommonInfo {
 				setOptimisticUnchokingInterval(Float.parseFloat(properties.getProperty(Constants.OptimUnchokingInterval)));
 				setUnchokingInterval(Float.parseFloat(properties.getProperty(Constants.UnchokingInterval)));
 				setNumberOfPreferredNeighbors(Integer.parseInt(properties.get(Constants.NumofPreferredNeighbors).toString()));
-			} catch (FileNotFoundException e) {
+				calculateNumberOfPieces();
+	    	} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
