@@ -4,7 +4,7 @@ import Config.*;
 import java.util.List;
 
 import Common.Server;
-
+import Common.SharedFile;
 import Common.Client;
 import Common.Constants;
 import Common.Handshake;
@@ -22,6 +22,9 @@ public class PeerProcess {
 	        info.loadCommonConfig();
 	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);
 	        Handshake.setID(Pid);
+	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
+				SharedFile.getInstance().splitFile();
+			}
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 

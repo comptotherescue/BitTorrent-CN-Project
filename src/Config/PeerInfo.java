@@ -3,17 +3,18 @@ import java.io.*;
 import java.util.*;
 
 import Common.Constants;
+import Common.NetworkInfo;
 import Peer.Peer;
 
 public class PeerInfo {
 
-	  private static Map<Integer, Peer> peerMap;
+	  private static HashMap<String, NetworkInfo> peerMap;
 
-	    public static Peer getPeer(int id) {
+	    public static NetworkInfo getPeer(int id) {
 	        return peerMap.get(id);
 	    }
 
-	    public static List<Peer> getAllPeers() {
+	    public static LinkedList<NetworkInfo> getAllPeers() {
 	        return new LinkedList<>(peerMap.values());
 	    }
 
@@ -23,6 +24,7 @@ public class PeerInfo {
 
 	    public PeerInfo(String peerInfoConfigFile) {
 	        this.peerMap = new LinkedHashMap<>();
+	        int id = 1;
 	        Scanner sc = null;
 	        try {
 				sc = new Scanner(new File(Constants.PeerInfoPath));
@@ -32,8 +34,14 @@ public class PeerInfo {
 			}
 			while (sc.hasNextLine()) {
 				String str[] = sc.nextLine().split(" ");
-				Peer network = new Peer(Integer.parseInt(str[0]),str[1],Integer.parseInt(str[2]),str[3].equals("1") ? true : false);
-				peerMap.put(Integer.parseInt(str[0]),network);
+				//Peer network = new Peer(Integer.parseInt(str[0]),str[1],Integer.parseInt(str[2]),str[3].equals("1") ? true : false);
+				NetworkInfo network = new NetworkInfo();
+				network.setNumber(id++);
+				network.setPeerId(str[0]);
+				network.setHostName(str[1]);
+				network.setPort(Integer.parseInt(str[2]));
+				network.setHasSharedFile(str[3].equals("1") ? true : false);
+				peerMap.put(str[0], network);
 			}
 			sc.close();    
 	    }
