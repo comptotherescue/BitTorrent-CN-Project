@@ -44,14 +44,14 @@ public class Server implements Runnable{
 	                peer.send(outputStream, message);
 	            }
 	        } catch(IOException ioException) {
-	            System.out.println("IOException while opening socket at port number " + portNumber + " for peer " + peer.getId());
+	            //System.out.println("IOException while opening socket at port number " + portNumber + " for peer " + peer.getId());
 	            ioException.printStackTrace();
 	        } finally {
 	            if(listener != null) {
 	                try {
 	                    listener.close();
 	                } catch (IOException ioException1) {
-	                    System.out.println("IOException while closing listener socket at " + portNumber + " for peer " + peer.getId());
+	                  //  System.out.println("IOException while closing listener socket at " + portNumber + " for peer " + peer.getId());
 	                    ioException1.printStackTrace();
 	                }
 	            }

@@ -36,7 +36,7 @@ public class Client {
 	            byte[] message = Handshake.getMessage();
 	            peer.send(outputStream, message);
 	        } catch(IOException ioException) {
-	            System.out.println("IOException while connecting to server " + remotePeer.getId());
+	           // System.out.println("IOException while connecting to server " + remotePeer.getId());
 	            ioException.printStackTrace();
 	        }
 	    }

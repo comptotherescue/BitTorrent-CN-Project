@@ -25,6 +25,7 @@ public class PeerProcess {
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
 				SharedFile.getInstance().splitFile();
 			}
+	        Peer host = new Peer();
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 
