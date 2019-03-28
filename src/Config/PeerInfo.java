@@ -8,7 +8,7 @@ import Peer.Peer;
 
 public class PeerInfo {
 
-	  private static HashMap<String, NetworkInfo> peerMap;
+	  private static HashMap<Integer, NetworkInfo> peerMap;
 
 	    public static NetworkInfo getPeer(int id) {
 	        return peerMap.get(id);
@@ -41,7 +41,7 @@ public class PeerInfo {
 				network.setHostName(str[1]);
 				network.setPort(Integer.parseInt(str[2]));
 				network.setHasSharedFile(str[3].equals("1") ? true : false);
-				peerMap.put(str[0], network);
+				peerMap.put(Integer.parseInt(str[0]), network);
 			}
 			sc.close();    
 	    }

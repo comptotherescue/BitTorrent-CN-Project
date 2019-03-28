@@ -7,17 +7,17 @@ import Common.Handshake;
 import Common.SharedFile;
 import Common.Constants.Type;
 
-public class ManageMessages {
-	private static ManageMessages manageMassage;
+public class MessageHandler {
+	private static MessageHandler manageMassage;
 	private SharedFile sharedFile;
 
 	private void ManageMessage() {
 		sharedFile = SharedFile.getInstance();
 	}
 
-	public static synchronized ManageMessages getInstance() {
+	public static synchronized MessageHandler getInstance() {
 		if (manageMassage == null) {
-			manageMassage = new ManageMessages();
+			manageMassage = new MessageHandler();
 		}
 		return manageMassage;
 	}

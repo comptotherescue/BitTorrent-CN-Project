@@ -6,7 +6,7 @@ package Common;
 import java.io.*;
 import java.net.Socket;
 
-import Message.ManageMessages;
+import Message.MessageHandler;
 import Peer.Peer;
 
 /**

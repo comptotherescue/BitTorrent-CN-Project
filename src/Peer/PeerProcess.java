@@ -16,7 +16,7 @@ public class PeerProcess {
 		return Pid;
 	}
 	public static void main(String[] args) {
-		    Pid = 1100;
+		    Pid = 1001;
 	        //Pid = Integer.parseInt(args[0]);
 	        CommonInfo info = new CommonInfo();
 	        info.loadCommonConfig();
