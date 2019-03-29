@@ -122,11 +122,11 @@ public class ConnectionHandler {
 		preferredNeighbors.remove(connection);
 	}
 
-	protected synchronized void createConnection(Socket socket, String peerId) {
+	public synchronized void createConnection(Socket socket, String peerId) {
 		new Connection(socket, peerId);
 	}
 
-	protected synchronized void createConnection(Socket socket) {
+	public synchronized void createConnection(Socket socket) {
 		new Connection(socket);
 	}
 

@@ -14,8 +14,8 @@ public class PeerInfo {
 	        return peerMap.get(id);
 	    }
 
-	    public static LinkedList<NetworkInfo> getAllPeers() {
-	        return new LinkedList<>(peerMap.values());
+	    public static HashMap<Integer, NetworkInfo> getAllPeers() {
+	        return peerMap;
 	    }
 
 	    public static int numberOfPeers() {

@@ -3,9 +3,7 @@ package Peer;
 import Config.*;
 import java.util.List;
 
-import Common.Server;
 import Common.SharedFile;
-import Common.Client;
 import Common.Constants;
 import Common.Handshake;
 import Config.PeerInfo;
@@ -15,6 +13,9 @@ public class PeerProcess {
 	public static int getId() {
 		return Pid;
 	}
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		    Pid = 1001;
 	        //Pid = Integer.parseInt(args[0]);
@@ -25,7 +26,7 @@ public class PeerProcess {
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
 				SharedFile.getInstance().splitFile();
 			}
-	        Peer host = new Peer();
+	        Peer current = Peer.getInstance();
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 
