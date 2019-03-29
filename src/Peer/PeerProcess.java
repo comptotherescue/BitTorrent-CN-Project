@@ -1,6 +1,8 @@
 
 package Peer;
 import Config.*;
+
+import java.io.IOException;
 import java.util.List;
 
 import Common.SharedFile;
@@ -27,6 +29,13 @@ public class PeerProcess {
 				SharedFile.getInstance().splitFile();
 			}
 	        Peer current = Peer.getInstance();
+	        current.createTCPConnections();
+			try {
+				current.listenForConnections();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        //PeerInfo peerInfo = new PeerInfo("PeerInfo.cfg");
 	        //Peer peer = peerInfo.getPeer(Pid);
 

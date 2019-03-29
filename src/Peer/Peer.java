@@ -68,7 +68,6 @@ public class Peer {
 						createConnection(peerInfo);
 					}
 				}.start();
-
 			}
 		}
 	}
