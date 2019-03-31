@@ -8,7 +8,6 @@ import java.util.List;
 import Common.SharedFile;
 import Common.Constants;
 import Common.Handshake;
-import Config.PeerInfo;
 
 public class PeerProcess {
 	private static int Pid;
@@ -22,7 +21,7 @@ public class PeerProcess {
 		    Pid = 1001;
 	        //Pid = Integer.parseInt(args[0]);
 	        CommonInfo info = new CommonInfo();
-	        info.loadCommonConfig();
+	        CommonInfo.loadCommonConfig();
 	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);
 	        Handshake.setID(Pid);
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
