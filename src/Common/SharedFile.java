@@ -117,7 +117,7 @@ public class SharedFile extends Thread{
 		}
 	}
 
-	public synchronized void writeToFile(String peerId) {
+	public synchronized void writeToFile(int peerId) {
 		String filename = Constants.COMMON_PROPERTIES_CREATED_FILE_PATH + peerId + File.separatorChar
 				+ CommonInfo.getSharedFileName();
 		System.out.println(filename);
