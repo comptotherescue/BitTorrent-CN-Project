@@ -27,7 +27,7 @@ public class SharedData extends Thread{
 	private volatile boolean uploadHandshake;
 	private volatile boolean isHandshakeDownloaded;
 	private SharedFile sharedFile;
-	//private BroadcastThread broadcaster;
+	private BroadCastingThread broadcaster;
 	private boolean peerHasFile;
 	private Peer host = Peer.getInstance();
 	int i = 0;

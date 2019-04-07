@@ -1,7 +1,7 @@
+package Common;
+
 import java.util.concurrent.LinkedBlockingQueue;
 
-import Common.Connection;
-import Common.Constants;
 import Message.MessageHandler;
 
 public class BroadCastingThread extends Thread {
