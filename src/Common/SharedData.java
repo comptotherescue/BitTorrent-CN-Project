@@ -4,6 +4,7 @@
 package Common;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Calendar;
@@ -22,7 +23,7 @@ import Message.MessageHandler;
  */
 public class SharedData extends Thread{
 	private volatile boolean bitfieldSent;
-	//private BitSet peerBitset;
+	private BitSet peerBitset;
 	private int remotePeerId;
 	private Connection conn;
 	private volatile boolean uploadHandshake;
@@ -30,7 +31,6 @@ public class SharedData extends Thread{
 	private SharedFile sharedFile;
 	private BroadCastingThread broadcaster;
 	private boolean peerHasFile;
-	private Peer host = Peer.getInstance();
 	int i = 0;
 	private LinkedBlockingQueue<byte[]> payloadQueue;
 	private boolean isAlive;
@@ -42,7 +42,7 @@ public class SharedData extends Thread{
 		isAlive = true;
 		sharedFile = SharedFile.getInstance();
 		broadcaster = BroadCastingThread.getInstance();
-		//peerBitset = new BitSet(CommonProperties.getNumberOfPieces());
+		peerBitset = new BitSet(CommonInfo.getNumberOfPieces());
 	}
 
 	public void setUpload(Upload value) {
@@ -74,9 +74,9 @@ public class SharedData extends Thread{
 		}
 	}
 
-//	public synchronized BitSet getPeerBitSet() {
-//		return peerBitset;
-//	}
+	public synchronized BitSet getPeerBitSet() {
+		return peerBitset;
+	}
 
 	public synchronized void sendHandshake() {
 		setUploadHandshake();
@@ -108,23 +108,23 @@ public class SharedData extends Thread{
 
 	public synchronized void setPeerBitset(byte[] payload) {
 		for (int i = 1; i < payload.length; i++) {
-			// System.out.print(payload[i]);
+			 System.out.print(payload[i]);
 			if (payload[i] == 1) {
-			//	peerBitset.set(i - 1);
+				peerBitset.set(i - 1);
 			}
 		}
-//		if (peerBitset.cardinality() == CommonInfo.getNumberOfPieces()) {
-//			peerHasFile = true;
-//			ConnectionHandler.getInstance().addToPeersWithFullFile(remotePeerId);
-//		}
+		if (peerBitset.cardinality() == CommonInfo.getNumberOfPieces()) {
+			peerHasFile = true;
+			ConnectionHandler.getInstance().addToPeersWithFullFile(remotePeerId);
+		}
 	}
 
 	public synchronized void updatePeerBitset(int index) {
-//		peerBitset.set(index);
-//		if (peerBitset.cardinality() == CommonProperties.getNumberOfPieces()) {
-//			ConnectionManager.getInstance().addToPeersWithFullFile(remotePeerId);
-//			peerHasFile = true;
-//		}
+		peerBitset.set(index);
+		if (peerBitset.cardinality() == CommonInfo.getNumberOfPieces()) {
+			ConnectionHandler.getInstance().addToPeersWithFullFile(remotePeerId);
+			peerHasFile = true;
+		}
 	}
 
 	protected void processPayload(byte[] payload) {
@@ -162,7 +162,7 @@ public class SharedData extends Thread{
 		case HAVE:
 			// update peer bitset
 			// send interested/not interested
-			// pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
+			pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
 			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex,Constants.LOG_RECEIVE_HAVE_MESSAGE);
 			updatePeerBitset(pieceIndex);
 			responseMessageType = getInterestedNotInterested();
@@ -183,7 +183,7 @@ public class SharedData extends Thread{
 			responseMessageType = Type.PIECE;
 			byte[] content = new byte[4];
 			System.arraycopy(payload, 1, content, 0, 4);
-			//pieceIndex = ByteBuffer.wrap(content).getInt();
+			pieceIndex = ByteBuffer.wrap(content).getInt();
 			 System.out.println(pieceIndex);
 			if (pieceIndex == Integer.MIN_VALUE) {
 				System.out.println("received file");
@@ -191,7 +191,7 @@ public class SharedData extends Thread{
 			}
 			break;
 		case PIECE:
-			//pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
+			pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
 			conn.addBytesDownloaded(payload.length);
 			sharedFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
 			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
@@ -233,9 +233,9 @@ public class SharedData extends Thread{
 
 	private boolean isInterested() {
 		for (int i = 0; i < CommonInfo.getNumberOfPieces(); i++) {
-//			if (peerBitset.get(i) && !sharedFile.isPieceAvailable(i)) {
-//				return true;
-//			}
+			if (peerBitset.get(i) && !sharedFile.isPieceAvailable(i)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -272,8 +272,4 @@ public class SharedData extends Thread{
 		return Calendar.getInstance().getTime() + ": ";
 	}
 
-	public BitSet getPeerBitSet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

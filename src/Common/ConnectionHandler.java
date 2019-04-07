@@ -21,7 +21,7 @@ public class ConnectionHandler {
 	private HashSet<Connection> notInterested;
 	 private ArrayList<String> interestedPeerIds;
 	private PriorityQueue<Connection> preferredNeighbors;
-	public HashSet<String> peersWithFullFile = new HashSet<String>();
+	public HashSet<Integer> peersWithFullFile = new HashSet<Integer>();
 	
      
 	private int k =  CommonInfo.getNumberOfPreferredNeighbors();
@@ -135,7 +135,7 @@ public class ConnectionHandler {
 		allConnections.add(connection);
 	}
 
-	public void addToPeersWithFullFile(String str) {
+	public void addToPeersWithFullFile(int str) {
 		peersWithFullFile.add(str);
 	}
 	
