@@ -9,7 +9,7 @@ public class Connection {
 	SharedData sharedData;
 	double bytesDownloaded;
 	Socket peerSocket;
-	String peerID;
+	int peerID;
 	boolean choked;
 	private ConnectionHandler connectionHandler = ConnectionHandler.getInstance();
 	

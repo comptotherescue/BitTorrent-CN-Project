@@ -8,6 +8,7 @@ package Common;
  *
  */
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -50,8 +51,7 @@ public class ConnectionHandler {
 		monitor();
 	}
 
-	// TODO: Stop timer task p when a peer has the entire file himself & choose
-	// neighbors randomly
+	// TODO: Stop timer task p when a peer has the entire file now choose neighbors randomly
 	private void monitor() {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -62,11 +62,13 @@ public class ConnectionHandler {
 				if (preferredNeighbors.size() > 1) {
 					Connection conn = preferredNeighbors.poll();
 					conn.setDownloadedbytes(0);
+					ArrayList<Integer> preferredNeighborsList = new ArrayList<Integer>();
 					for (Connection connT : preferredNeighbors) {
+						preferredNeighborsList.add(connT.peerID);
 						connT.setDownloadedbytes(0);
 					}
 				//	broadcaster.addMessage(new Object[] { conn, Message.Type.CHOKE, Integer.MIN_VALUE });
-				//	GenerateLog.writeLog(preferredNeighbors, MessageType);
+				GenerateLog.writeLog(preferredNeighborsList, Constants.LOG_CHANGE_OF_PREFERREDNEIGHBORS);
 					// System.out.println("Choking:" + conn.getRemotePeerId());
 				}
 			}
@@ -79,8 +81,7 @@ public class ConnectionHandler {
 					if (!notInterested.contains(conn) && !preferredNeighbors.contains(conn) && !conn.hasFile()) {
 					//	broadcaster.addMessage(new Object[] { conn, Message.Type.UNCHOKE, Integer.MIN_VALUE });
 						preferredNeighbors.add(conn);
-					//	LoggerUtil.getInstance().logOptimisticallyUnchokeNeighbor(getTime(), peerProcessMain.getId(),
-								conn.getRemotePeerId();
+						GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
 					}
 				}
 			}

@@ -8,14 +8,14 @@ public class Handshake {
 	 private static final String HANDSHAKE_HEADER = "P2PFILESHARINGPROJ";
 	 private static String message = "";
 	
-	public static synchronized boolean verify(byte[] msg, String pId) {
+	public static synchronized boolean verify(byte[] msg, int pId) {
 			String recvdMsg = new String(msg);
 			return recvdMsg.indexOf(pId) != -1 && recvdMsg.contains(HANDSHAKE_HEADER);
 		}
 
-	public static synchronized String getPid(byte[] msg) {
+	public static synchronized int getPid(byte[] msg) {
 		byte[] remotePId = Arrays.copyOfRange(msg, msg.length - 4, msg.length);
-		return new String(remotePId);
+		return Integer.parseInt(new String(remotePId));
 	}
 		
 	public static synchronized byte[] getMessage() {

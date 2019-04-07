@@ -40,8 +40,8 @@ public class GenerateLog {
 		else if(MessageType.equals(Constants.LOG_CHOKING)) {
 			logger.info(": Peer " + peerId + Constants.LOG_CHOKING + rPeerId + "\n");
 		}
-		else if(MessageType.equals(Constants.LOG_CHOKING)) {
-			logger.info(": Peer " + peerId + Constants.LOG_CHOKING + rPeerId + "\n");
+		else if(MessageType.equals(Constants.LOG_UNCHOKING)) {
+			logger.info(": Peer " + peerId + Constants.LOG_UNCHOKING + rPeerId + "\n");
 		}
 		else if(MessageType.equals(Constants.LOG_RECEIVE_INTERESTED_MESSAGE)) {
 			logger.info(": Peer " + peerId + Constants.LOG_RECEIVE_INTERESTED_MESSAGE +rPeerId + "\n");
