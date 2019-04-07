@@ -81,7 +81,7 @@ public class ConnectionHandler {
 					if (!notInterested.contains(conn) && !preferredNeighbors.contains(conn) && !conn.hasFile()) {
 					//	broadcaster.addMessage(new Object[] { conn, Message.Type.UNCHOKE, Integer.MIN_VALUE });
 						preferredNeighbors.add(conn);
-						GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
+						GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
 					}
 				}
 			}
@@ -106,7 +106,7 @@ public class ConnectionHandler {
 	 * If preferredNeighbors < k, send unchoke & add to preferredNeighbors
 	 * Otherwise, remove from not interested & add to interested
 	 */
-	public synchronized void addInterestedConnection(String peerId, Connection connection) {
+	public synchronized void addInterestedConnection(int peerID, Connection connection) {
 		if (preferredNeighbors.size() <= k && !preferredNeighbors.contains(connection)) {
 			connection.setDownloadedbytes(0);
 			preferredNeighbors.add(connection);
@@ -123,7 +123,7 @@ public class ConnectionHandler {
 		preferredNeighbors.remove(connection);
 	}
 
-	public synchronized void createConnection(Socket socket, String peerId) {
+	public synchronized void createConnection(Socket socket, int peerId) {
 		new Connection(socket, peerId);
 	}
 

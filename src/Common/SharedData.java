@@ -5,6 +5,7 @@ package Common;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -136,25 +137,25 @@ public class SharedData extends Thread{
 		switch (messageType) {
 		case CHOKE:
 			// clear requested pieces of this connection
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_CHOKING);
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHOKING);
 			conn.removeRequestedPiece();
 			responseMessageType = null;
 			break;
 		case UNCHOKE:
 			// respond with request
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_UNCHOKING);
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_UNCHOKING);
 			responseMessageType = Type.REQUEST;
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
 			break;
 		case INTERESTED:
 			// add to interested connections
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_RECEIVE_INTERESTED_MESSAGE);
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_RECEIVE_INTERESTED_MESSAGE);
 			conn.addInterestedConnection();
 			responseMessageType = null;
 			break;
 		case NOTINTERESTED:
 			// add to not interested connections
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_RECEIVE_NOT_INTERESTED_MESSAGE);
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_RECEIVE_NOT_INTERESTED_MESSAGE);
 			conn.addInterestedConnection();
 			responseMessageType = null;
 			break;
@@ -162,7 +163,7 @@ public class SharedData extends Thread{
 			// update peer bitset
 			// send interested/not interested
 			// pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),pieceIndex,Constants.LOG_RECEIVE_HAVE_MESSAGE);
+			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex,Constants.LOG_RECEIVE_HAVE_MESSAGE);
 			updatePeerBitset(pieceIndex);
 			responseMessageType = getInterestedNotInterested();
 			break;
@@ -193,7 +194,7 @@ public class SharedData extends Thread{
 			//pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
 			conn.addBytesDownloaded(payload.length);
 			sharedFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
-			GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
+			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
 			responseMessageType = Type.REQUEST;
 			conn.tellAllNeighbors(pieceIndex);
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
@@ -269,5 +270,10 @@ public class SharedData extends Thread{
 
 	public String getTime() {
 		return Calendar.getInstance().getTime() + ": ";
+	}
+
+	public BitSet getPeerBitSet() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

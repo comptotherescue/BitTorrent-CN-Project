@@ -3,6 +3,8 @@ package Common;
 
 import java.net.Socket;
 import java.util.BitSet;
+
+import Logger.GenerateLog;
 import Peer.Peer;
 
 public class Connection {
@@ -15,14 +17,14 @@ public class Connection {
 	boolean choked;
 	private ConnectionHandler connectionHandler = ConnectionHandler.getInstance();
 	
-	public Connection(Socket socket, String peerId) {
+	public Connection(Socket socket, int peerId) {
 		// TODO Auto-generated constructor stub
 		this.peerSocket = peerSocket;
 		sharedData = new SharedData(this);
 		upload = new Upload(peerSocket, peerId, sharedData);
 		download = new Download(peerSocket, peerId, sharedData);
 		createThreads(upload, download);
-		LoggerUtil.getInstance().logTcpConnectionTo(Peer.getInstance().getNetwork().getPeerId(), peerId);
+		GenerateLog.writeLog(peerId,Constants.LOG_TCP_CREATE_CONNECTION);
 		sharedData.sendHandshake();
 		sharedData.setUpload(upload);
 		sharedData.start();
@@ -66,7 +68,7 @@ public class Connection {
 		return sharedData.hasFile();
 	}
 
-	public synchronized String getRemotePeerId() {
+	public synchronized int getRemotePeerId() {
 		 return peerID;
 		// TODO Auto-generated method stub
 		

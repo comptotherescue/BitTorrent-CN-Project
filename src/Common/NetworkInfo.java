@@ -2,12 +2,12 @@ package Common;
 
 public class NetworkInfo {
 	private int num;
-	private String Pid;
+	private int Pid;
 	private String hName;
 	private int port;
 	private boolean hasSFile;
 
-	public String getPeerId() {
+	public int getPeerId() {
 		return Pid;
 	}
 
@@ -19,7 +19,7 @@ public class NetworkInfo {
 		this.num = number;
 	}
 
-	public void setPeerId(String peerId) {
+	public void setPeerId(int peerId) {
 		this.Pid = Pid;
 	}
 

@@ -16,7 +16,7 @@ public class Upload implements Runnable{
 	private DataOutputStream outStream;
 	private boolean isAlive;
 	// This is for Client thread initialization
-		public Upload(Socket skt, String id, SharedData data) {
+		public Upload(Socket skt, int id, SharedData data) {
 			init(skt, data);
 		}
 

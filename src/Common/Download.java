@@ -14,7 +14,7 @@ public class Download implements Runnable{
 	private boolean isAlive;
 	
 	    // This is for Client initialization
-		public Download(Socket skt, String peerId, SharedData data) {
+		public Download(Socket skt, int peerId, SharedData data) {
 			init(skt, data);
 		}
 

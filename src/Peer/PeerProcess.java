@@ -1,6 +1,7 @@
 
 package Peer;
 import Config.*;
+import Logger.GenerateLog;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +21,12 @@ public class PeerProcess {
 	public static void main(String[] args) {
 		    Pid = 1001;
 	        //Pid = Integer.parseInt(args[0]);
+		    try {
+				GenerateLog G = new GenerateLog(Pid);
+			} catch (SecurityException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 	        CommonInfo info = new CommonInfo();
 	        CommonInfo.loadCommonConfig();
 	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);

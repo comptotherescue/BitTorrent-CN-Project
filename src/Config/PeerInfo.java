@@ -37,7 +37,7 @@ public class PeerInfo {
 				//Peer network = new Peer(Integer.parseInt(str[0]),str[1],Integer.parseInt(str[2]),str[3].equals("1") ? true : false);
 				NetworkInfo network = new NetworkInfo();
 				network.setNumber(id++);
-				network.setPeerId(str[0]);
+				network.setPeerId(Integer.parseInt(str[0]));
 				network.setHostName(str[1]);
 				network.setPort(Integer.parseInt(str[2]));
 				network.setHasSharedFile(str[3].equals("1") ? true : false);
