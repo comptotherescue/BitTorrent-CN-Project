@@ -1,7 +1,9 @@
 package Common;
 
+
 import java.net.Socket;
 import java.util.BitSet;
+import Peer.Peer;
 
 public class Connection {
 	Upload upload;
@@ -15,15 +17,37 @@ public class Connection {
 	
 	public Connection(Socket socket, String peerId) {
 		// TODO Auto-generated constructor stub
+		this.peerSocket = peerSocket;
+		sharedData = new SharedData(this);
+		upload = new Upload(peerSocket, peerId, sharedData);
+		download = new Download(peerSocket, peerId, sharedData);
+		createThreads(upload, download);
+		LoggerUtil.getInstance().logTcpConnectionTo(Peer.getInstance().getNetwork().getPeerId(), peerId);
+		sharedData.sendHandshake();
+		sharedData.setUpload(upload);
+		sharedData.start();
 	}
 
 	public Connection(Socket socket) {
 		// TODO Auto-generated constructor stub
+		this.peerSocket = peerSocket;
+		sharedData = new SharedData(this);
+		upload = new Upload(peerSocket, sharedData);
+		download = new Download(peerSocket, sharedData);
+		createThreads(upload, download);
+		sharedData.setUpload(upload);
+		sharedData.start();
+	}
+	public void createThreads(Upload upload, Download download) {
+		Thread uploadThread = new Thread(upload);
+		Thread downloadThread = new Thread(download);
+		uploadThread.start();
+		downloadThread.start();
 	}
 
 	public BitSet getPeerBitSet() {
 		// TODO Auto-generated method stub
-		return null;
+		return sharedData.getPeerBitSet();
 	}
 
 	public int getBytesDownloaded() {
@@ -31,29 +55,31 @@ public class Connection {
 		return 0;
 	}
 
-	public void setDownloadedbytes(int i) {
+	public synchronized void setDownloadedbytes(int i) {
 		// TODO Auto-generated method stub
+		bytesDownloaded = i;
 		
 	}
 
 	public boolean hasFile() {
 		// TODO Auto-generated method stub
-		return false;
+		return sharedData.hasFile();
 	}
 
-	public int getRemotePeerId() {
-		return 0;
+	public synchronized String getRemotePeerId() {
+		 return peerID;
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void addInterestedConnection() {
+	public synchronized void addInterestedConnection() {
 		// TODO Auto-generated method stub
-		
+		connectionHandler.addInterestedConnection(peerID, this);
 	}
 
 	public void addBytesDownloaded(int length) {
 		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -64,7 +90,7 @@ public class Connection {
 
 	public void addAllConnections() {
 		// TODO Auto-generated method stub
-		
+		connectionHandler.addAllConnections(this);
 	}
 
 	public void setPeerId(int remotePeerId) {
