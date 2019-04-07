@@ -82,4 +82,9 @@ public class Connection {
 		
 	}
 
+	public void sendMessage(int messageLength, byte[] payload) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
