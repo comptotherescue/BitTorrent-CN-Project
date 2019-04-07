@@ -1,19 +1,19 @@
 package Common;
 
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.BitSet;
 
 import Logger.GenerateLog;
-import Peer.Peer;
 
 public class Connection {
 	Upload upload;
 	Download download;
 	SharedData sharedData;
-	double bytesDownloaded;
+	int bytesDownloaded;
 	Socket peerSocket;
-	int peerID;
+	int remotePid;
 	boolean choked;
 	private ConnectionHandler connectionHandler = ConnectionHandler.getInstance();
 	
@@ -54,7 +54,7 @@ public class Connection {
 
 	public int getBytesDownloaded() {
 		// TODO Auto-generated method stub
-		return 0;
+		return bytesDownloaded;
 	}
 
 	public synchronized void setDownloadedbytes(int i) {
@@ -69,25 +69,24 @@ public class Connection {
 	}
 
 	public synchronized int getRemotePeerId() {
-		 return peerID;
-		// TODO Auto-generated method stub
-		
+		 return remotePid;
+		// TODO Auto-generated method stub	
 	}
 
 	public synchronized void addInterestedConnection() {
 		// TODO Auto-generated method stub
-		connectionHandler.addInterestedConnection(peerID, this);
+		connectionHandler.addInterestedConnection(remotePid, this);
 	}
 
 	public void addBytesDownloaded(int length) {
 		// TODO Auto-generated method stub
-
+		bytesDownloaded += length;
 		
 	}
 
 	public void tellAllNeighbors(int pieceIndex) {
 		// TODO Auto-generated method stub
-		
+		connectionHandler.tellAllNeighbors(pieceIndex);
 	}
 
 	public void addAllConnections() {
@@ -97,22 +96,27 @@ public class Connection {
 
 	public void setPeerId(int remotePeerId) {
 		// TODO Auto-generated method stub
-		
+		remotePid = remotePeerId;
 	}
 
 	public void removeRequestedPiece() {
 		// TODO Auto-generated method stub
-		
+		SharedFile.getInstance().removeRequestedPiece(this);
 	}
 
 	public void close() {
 		// TODO Auto-generated method stub
-		
+		try {
+			peerSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void sendMessage(int messageLength, byte[] payload) {
 		// TODO Auto-generated method stub
-		
+		upload.addMessage(messageLength, payload);
 	}
 
 }

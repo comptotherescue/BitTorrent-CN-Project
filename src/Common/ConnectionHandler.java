@@ -59,7 +59,7 @@ public class ConnectionHandler {
 					conn.setDownloadedbytes(0);
 					ArrayList<Integer> preferredNeighborsList = new ArrayList<Integer>();
 					for (Connection connT : preferredNeighbors) {
-						preferredNeighborsList.add(connT.peerID);
+						preferredNeighborsList.add(connT.remotePid);
 						connT.setDownloadedbytes(0);
 					}
 					broadcaster.addMessage(new Object[] { conn, Constants.Type.CHOKE, Integer.MIN_VALUE });
