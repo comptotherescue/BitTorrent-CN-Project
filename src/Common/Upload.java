@@ -58,7 +58,6 @@ public class Upload implements Runnable{
 			uploadLenQue = new LinkedBlockingQueue<>();
 			isAlive = true;
 			this.skt = clientSocket;
-			// sharedData = data;
 			try {
 				outStream = new DataOutputStream(skt.getOutputStream());
 			} catch (IOException e) {
