@@ -81,7 +81,7 @@ public class ConnectionHandler {
 					if (!notInterested.contains(conn) && !preferredNeighbors.contains(conn) && !conn.hasFile()) {
 					//	broadcaster.addMessage(new Object[] { conn, Message.Type.UNCHOKE, Integer.MIN_VALUE });
 						preferredNeighbors.add(conn);
-						GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
+						GenerateLog.writeLog(Integer.parseInt(conn.getRemotePeerId()),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
 					}
 				}
 			}
