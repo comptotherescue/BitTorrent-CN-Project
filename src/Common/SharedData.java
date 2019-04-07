@@ -40,14 +40,14 @@ public class SharedData extends Thread{
 		payloadQueue = new LinkedBlockingQueue<>();
 		isAlive = true;
 		sharedFile = SharedFile.getInstance();
-		//broadcaster = BroadcastThread.getInstance();
+		broadcaster = BroadCastingThread.getInstance();
 		//peerBitset = new BitSet(CommonProperties.getNumberOfPieces());
 	}
 
 	public void setUpload(Upload value) {
 		upload = value;
 		if (getUploadHandshake()) {
-			//broadcaster.addMessage(new Object[] { conn, Message.Type.HANDSHAKE, Integer.MIN_VALUE });
+			broadcaster.addMessage(new Object[] { conn, Constants.Type.HANDSHAKE, Integer.MIN_VALUE });
 		}
 	}
 
@@ -210,24 +210,23 @@ public class SharedData extends Thread{
 			remotePeerId = Handshake.getRemotePId(payload);
 			conn.setPeerId(remotePeerId);
 			conn.addAllConnections();
-			// System.out.println("Handshake: " + responseMessageType);
+			System.out.println("Handshake: " + responseMessageType);
 			if (!getUploadHandshake()) {
 				setUploadHandshake();
 				GenerateLog.writeLog(remotePeerId,Constants.LOG_TCP_CREATE_CONNECTION);
-			//	broadcaster.addMessage(new Object[] { conn, Message.Type.HANDSHAKE, Integer.MIN_VALUE });
-				// System.out.println("Added " + messageType + " to broadcaster");
+			 	broadcaster.addMessage(new Object[] { conn, Constants.Type.HANDSHAKE, Integer.MIN_VALUE });
+				System.out.println("Added " + messageType + " to broadcaster");
 			}
 			if (sharedFile.hasAnyPieces()) {
 				responseMessageType = Type.BITFIELD;
 			}
-			// System.out.println("Response Message Type: " + responseMessageType);
+			System.out.println("Response Message Type: " + responseMessageType);
 			break;
 		}
 
 		if (null != responseMessageType) {
-			// System.out.println("Shared data if: Added " + responseMessageType + " to
-			// broadcaster");
-			//broadcaster.addMessage(new Object[] { conn, responseMessageType, pieceIndex });
+			System.out.println("Shared data if: Added " + responseMessageType + " to broadcaster");
+			broadcaster.addMessage(new Object[] { conn, responseMessageType, pieceIndex });
 		}
 	}
 
