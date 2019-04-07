@@ -79,7 +79,7 @@ public class Download implements Runnable{
 		protected void receiveMessage() {
 			// System.out.println("Receive started");
 			while (isAlive()) {
-				// System.out.println("Receive started");
+				System.out.println("Receive started");
 				int messageLength = Integer.MIN_VALUE;
 				messageLength = receiveMsgLen();
 				if (!isAlive()) {
@@ -88,7 +88,7 @@ public class Download implements Runnable{
 				byte[] payL = new byte[messageLength];
 				receiveMsgPayL(payL);
 				sharedData.addPayload(payL);
-				// System.out.println("Receive finished");
+				System.out.println("Receive finished");
 			}
 
 		}
