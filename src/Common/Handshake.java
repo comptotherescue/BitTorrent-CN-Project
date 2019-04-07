@@ -32,13 +32,13 @@ public class Handshake {
 	}
 	
 
-	public static synchronized String getRemotePId(byte[] byt) {
+	public static synchronized int getRemotePId(byte[] byt) {
 		String id = "";
 		int too = byt.length;
 		int fro = too - 4;
 		byte[] bytes = Arrays.copyOfRange(byt, fro, too);
 		String strtmp = new String(bytes, StandardCharsets.UTF_8);
-		return strtmp;
+		return Integer.parseInt(strtmp);
 	}
 
 }

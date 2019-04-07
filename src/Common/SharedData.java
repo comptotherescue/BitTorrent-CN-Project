@@ -3,12 +3,14 @@
  */
 package Common;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import Common.Constants.Type;
 import Config.CommonInfo;
+import Logger.GenerateLog;
 import Peer.Peer;
 import Peer.PeerProcess;
 import Message.MessageHandler;
@@ -20,7 +22,7 @@ import Message.MessageHandler;
 public class SharedData extends Thread{
 	private volatile boolean bitfieldSent;
 	//private BitSet peerBitset;
-	private String remotePeerId;
+	private int remotePeerId;
 	private Connection conn;
 	private volatile boolean uploadHandshake;
 	private volatile boolean isHandshakeDownloaded;
@@ -87,15 +89,15 @@ public class SharedData extends Thread{
 		return uploadHandshake;
 	}
 
-	public void updatePeerId(String peerId) {
+	public void updatePeerId(int peerId) {
 		remotePeerId = peerId;
 	}
 
-	public synchronized String getRemotePeerId() {
+	public synchronized int getRemotePeerId() {
 		return remotePeerId;
 	}
 
-	public synchronized void setRemotePeerId(String remotePeerId) {
+	public synchronized void setRemotePeerId(int remotePeerId) {
 		this.remotePeerId = remotePeerId;
 	}
 
@@ -118,7 +120,6 @@ public class SharedData extends Thread{
 
 	public synchronized void updatePeerBitset(int index) {
 //		peerBitset.set(index);
-//		// Banka
 //		if (peerBitset.cardinality() == CommonProperties.getNumberOfPieces()) {
 //			ConnectionManager.getInstance().addToPeersWithFullFile(remotePeerId);
 //			peerHasFile = true;
@@ -131,31 +132,29 @@ public class SharedData extends Thread{
 		Type responseMessageType = null;
 		int pieceIndex = Integer.MIN_VALUE;
 		System.out.println("Received message: " + messageType);
-		// LoggerUtil.getInstance().logDebug("Received message: " + messageType);
+		GenerateLog.writeLog("Received message: " + messageType);
 		switch (messageType) {
 		case CHOKE:
 			// clear requested pieces of this connection
-//			LoggerUtil.getInstance().logChokingNeighbor(getTime(), peerProcessMain.getId(), conn.getRemotePeerId());
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHOKING);
 			conn.removeRequestedPiece();
 			responseMessageType = null;
 			break;
 		case UNCHOKE:
 			// respond with request
-			//LoggerUtil.getInstance().logUnchokingNeighbor(getTime(), peerProcessMain.getId(), conn.getRemotePeerId());
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_UNCHOKING);
 			responseMessageType = Type.REQUEST;
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
 			break;
 		case INTERESTED:
 			// add to interested connections
-		//	LoggerUtil.getInstance().logReceivedInterestedMessage(getTime(), peerProcessMain.getId(),
-			//		conn.getRemotePeerId());
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_RECEIVE_INTERESTED_MESSAGE);
 			conn.addInterestedConnection();
 			responseMessageType = null;
 			break;
 		case NOTINTERESTED:
 			// add to not interested connections
-			//LoggerUtil.getInstance().logReceivedNotInterestedMessage(getTime(), peerProcessMain.getId(),
-				//	conn.getRemotePeerId());
+			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_RECEIVE_NOT_INTERESTED_MESSAGE);
 			conn.addInterestedConnection();
 			responseMessageType = null;
 			break;
@@ -163,8 +162,7 @@ public class SharedData extends Thread{
 			// update peer bitset
 			// send interested/not interested
 			// pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
-			//LoggerUtil.getInstance().logReceivedHaveMessage(getTime(), peerProcessMain.getId(), conn.getRemotePeerId(),
-			//		pieceIndex);
+			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex,Constants.LOG_RECEIVE_HAVE_MESSAGE);
 			updatePeerBitset(pieceIndex);
 			responseMessageType = getInterestedNotInterested();
 			break;
@@ -172,12 +170,11 @@ public class SharedData extends Thread{
 			// update peer bitset
 			// send interested/not interested
 			setPeerBitset(payload);
-			// try {
-			// LoggerUtil.getInstance().logDebug(new String(payload, "UTF-8"));
-			// } catch (UnsupportedEncodingException e1) {
-			// // TODO Auto-generated catch block
-			// e1.printStackTrace();
-			// }
+			try {
+				GenerateLog.writeLog(new String(payload, "UTF-8"));
+			 } catch (UnsupportedEncodingException e1) {
+			 e1.printStackTrace();
+			 }
 			responseMessageType = getInterestedNotInterested();
 			break;
 		case REQUEST:
@@ -186,33 +183,27 @@ public class SharedData extends Thread{
 			byte[] content = new byte[4];
 			System.arraycopy(payload, 1, content, 0, 4);
 			//pieceIndex = ByteBuffer.wrap(content).getInt();
-			// System.out.println(pieceIndex);
+			 System.out.println(pieceIndex);
 			if (pieceIndex == Integer.MIN_VALUE) {
 				System.out.println("received file");
 				responseMessageType = null;
 			}
 			break;
 		case PIECE:
-			/*
-			 * update own bitset & file . Send have to all neighbors & notinterested to
-			 * neighbors with same bitset. Respond with request update bytesDownloaded pi =
-			 * pieceIndex
-			 */
 			//pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
 			conn.addBytesDownloaded(payload.length);
 			sharedFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
-			//LoggerUtil.getInstance().logDownloadedPiece(getTime(), peerProcessMain.getId(), conn.getRemotePeerId(),
-				//	pieceIndex, sharedFile.getReceivedFileSize());
+			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
 			responseMessageType = Type.REQUEST;
 			conn.tellAllNeighbors(pieceIndex);
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
 			if (pieceIndex == Integer.MIN_VALUE) {
-			//	LoggerUtil.getInstance().logFinishedDownloading(getTime(), peerProcessMain.getId());
+				GenerateLog.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
 				sharedFile.writeToFile(PeerProcess.getId());
 				messageType = null;
 				isAlive = false;
 				responseMessageType = null;
-				// conn.close();
+				conn.close();
 			}
 			break;
 		case HANDSHAKE:
@@ -222,7 +213,7 @@ public class SharedData extends Thread{
 			// System.out.println("Handshake: " + responseMessageType);
 			if (!getUploadHandshake()) {
 				setUploadHandshake();
-				//LoggerUtil.getInstance().logTcpConnectionFrom(host.getNetwork().getPeerId(), remotePeerId);
+				GenerateLog.writeLog(remotePeerId,Constants.LOG_TCP_CREATE_CONNECTION);
 			//	broadcaster.addMessage(new Object[] { conn, Message.Type.HANDSHAKE, Integer.MIN_VALUE });
 				// System.out.println("Added " + messageType + " to broadcaster");
 			}

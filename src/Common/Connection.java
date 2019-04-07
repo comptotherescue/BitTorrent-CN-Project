@@ -41,7 +41,8 @@ public class Connection {
 		return false;
 	}
 
-	public void getRemotePeerId() {
+	public int getRemotePeerId() {
+		return 0;
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,12 +67,17 @@ public class Connection {
 		
 	}
 
-	public void setPeerId(String remotePeerId) {
+	public void setPeerId(int remotePeerId) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	public void removeRequestedPiece() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void close() {
 		// TODO Auto-generated method stub
 		
 	}

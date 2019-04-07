@@ -66,8 +66,8 @@ public class GenerateLog {
         }
         logger.info(textLog.toString());
 	}
-	public static void writeLog(int rPeerId, int pieceIndex, int numberOfPieces,String MessageType) {  // Download Piece Message
-		 logger.info(": Peer " + peerId + MessageType + pieceIndex + " from " + rPeerId + "." + "Now the number of pieces it has is "+numberOfPieces+"\n");
+	public static void writeLog(int rPeerId, int pieceIndex, int sizeOfDownloadedPiece,String MessageType) {  // Download Piece Message
+		 logger.info(": Peer " + peerId + MessageType + pieceIndex + " from " + rPeerId + "." + "Size of pieces downloaded piece is "+sizeOfDownloadedPiece+"\n");
 	}
 	 public static void writeLog(int rPeerId, int pieceIndex,String Messagetype) {   // Received Have message
 	        logger.info(": Peer " + peerId + Messagetype + rPeerId + " for the piece " + pieceIndex + "\n");
