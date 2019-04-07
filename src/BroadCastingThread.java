@@ -5,15 +5,16 @@ import Common.Constants;
 import Message.MessageHandler;
 
 public class BroadCastingThread extends Thread {
-	private LinkedBlockingQueue<Object[]> queue;
+	
 	private MessageHandler messageManager;
 	private Connection conn;
 	private Constants.Type messageType;
 	private int pieceIndex;
+	private LinkedBlockingQueue<Object[]> que;
 	private static BroadCastingThread broadcaster;
 
 	private BroadCastingThread() {
-		queue = new LinkedBlockingQueue<>();
+		que = new LinkedBlockingQueue<>();
 		messageManager = MessageHandler.getInstance();
 		conn = null;
 		messageType = null;
@@ -30,7 +31,7 @@ public class BroadCastingThread extends Thread {
 
 	protected synchronized void addMessage(Object[] data) {
 		try {
-			queue.put(data);
+			que.put(data);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class BroadCastingThread extends Thread {
 	private Object[] retrieveMessage() {
 		Object[] data = null;
 		try {
-			data = queue.take();
+			data = que.take();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
