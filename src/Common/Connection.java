@@ -32,10 +32,10 @@ public class Connection {
 
 	public Connection(Socket socket) {
 		// TODO Auto-generated constructor stub
-		this.peerSocket = peerSocket;
+		this.peerSocket = socket;
 		sharedData = new SharedData(this);
-		upload = new Upload(peerSocket, sharedData);
-		download = new Download(peerSocket, sharedData);
+		upload = new Upload(socket, sharedData);
+		download = new Download(socket, sharedData);
 		createThreads(upload, download);
 		sharedData.setUpload(upload);
 		sharedData.start();
