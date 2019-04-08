@@ -20,7 +20,7 @@ public class Handshake {
 		
 	public static synchronized byte[] getMessage() {
 		// TODO Auto-generated method stub
-		byte[] handShanke = new byte[32];
+		byte[] handShanke = new byte[22];
 		ByteBuffer bb = ByteBuffer.wrap(message.getBytes());
 		bb.get(handShanke);
 		return handShanke;
