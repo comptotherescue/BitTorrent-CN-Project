@@ -13,12 +13,12 @@ public class Peer {
 
 	private static Peer host = new Peer();
 	private NetworkInfo network;
-	ConnectionHandler connectionManager;
+	ConnectionHandler connectionHandler;
 	public static boolean allPeersReceivedFiles = false;
 
 	public Peer() {
 		network = PeerInfo.getPeer(PeerProcess.getId());
-		connectionManager = ConnectionHandler.getInstance();
+		connectionHandler = ConnectionHandler.getInstance();
 	}
 
 	public static Peer getInstance() {
@@ -47,7 +47,7 @@ public class Peer {
 			// TODO: End connection when all peers have received files
 			while (false == allPeersReceivedFiles) {
 				Socket peerSocket = socket.accept();
-				connectionManager.createConnection(peerSocket);
+				connectionHandler.createConnection(peerSocket);
 			}
 		} catch (Exception e) {
 			System.out.println("Closed exception");
@@ -77,7 +77,7 @@ public class Peer {
 		String peerHost = peerInfo.getHostName();
 		try {
 			Socket clientSocket = new Socket(peerHost, peerPort);
-			connectionManager.createConnection(clientSocket, peerInfo.getPeerId());
+			connectionHandler.createConnection(clientSocket, peerInfo.getPeerId());
 			Thread.sleep(300);
 		} catch (Exception e) {
 			e.printStackTrace();
