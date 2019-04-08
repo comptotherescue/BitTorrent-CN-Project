@@ -19,10 +19,10 @@ public class Connection {
 	
 	public Connection(Socket socket, int peerId) {
 		// TODO Auto-generated constructor stub
-		this.peerSocket = peerSocket;
+		this.peerSocket = socket;
 		sharedData = new SharedData(this);
-		upload = new Upload(peerSocket, peerId, sharedData);
-		download = new Download(peerSocket, peerId, sharedData);
+		upload = new Upload(socket, peerId, sharedData);
+		download = new Download(socket, peerId, sharedData);
 		createThreads(upload, download);
 		GenerateLog.writeLog(peerId,Constants.LOG_TCP_CREATE_CONNECTION);
 		sharedData.sendHandshake();
