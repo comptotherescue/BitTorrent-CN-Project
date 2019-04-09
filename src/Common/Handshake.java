@@ -7,6 +7,7 @@ import java.util.Arrays;
 public class Handshake {
 	 private static final String HANDSHAKE_HEADER = "P2PFILESHARINGPROJ";
 	 private static String message = "";
+	 private static final int messageSize = 22;
 	
 	public static synchronized boolean verify(byte[] msg, int pId) {
 			String recvdMsg = new String(msg);
@@ -20,7 +21,7 @@ public class Handshake {
 		
 	public static synchronized byte[] getMessage() {
 		// TODO Auto-generated method stub
-		byte[] handShanke = new byte[message.length()];
+		byte[] handShanke = new byte[messageSize];
 		ByteBuffer bb = ByteBuffer.wrap(message.getBytes());
 		bb.get(handShanke);
 		return handShanke;
