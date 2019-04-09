@@ -128,8 +128,7 @@ public class SharedData extends Thread{
 	}
 
 	protected void processPayload(byte[] payload) {
-		MessageHandler messageHandler= MessageHandler.getInstance();
-		Type messageType = messageHandler.getType(payload[0]);
+		Type messageType = getMessageType(payload[0]);
 		Type responseMessageType = null;
 		int pieceIndex = Integer.MIN_VALUE;
 		System.out.println("Received message: " + messageType);
