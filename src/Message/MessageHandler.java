@@ -8,18 +8,18 @@ import Common.SharedFile;
 import Common.Constants.Type;
 
 public class MessageHandler {
-	private static MessageHandler manageMassage;
+	private static MessageHandler messageHandler;
 	private SharedFile sharedFile;
 
-	private void ManageMessage() {
+	private void MessageHandler() {
 		sharedFile = SharedFile.getInstance();
 	}
 
 	public static synchronized MessageHandler getInstance() {
-		if (manageMassage == null) {
-			manageMassage = new MessageHandler();
+		if (messageHandler == null) {
+			messageHandler = new MessageHandler();
 		}
-		return manageMassage;
+		return messageHandler;
 	}
 
 	public synchronized Type getType(byte type) {
