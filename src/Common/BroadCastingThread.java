@@ -6,7 +6,7 @@ import Message.MessageHandler;
 
 public class BroadCastingThread extends Thread {
 	
-	private MessageHandler messageManager;
+	private MessageHandler messageHandler;
 	private Connection conn;
 	private Constants.Type messageType;
 	private int pieceIndex;
@@ -15,7 +15,7 @@ public class BroadCastingThread extends Thread {
 
 	private BroadCastingThread() {
 		que = new LinkedBlockingQueue<>();
-		messageManager = MessageHandler.getInstance();
+		messageHandler = MessageHandler.getInstance();
 		conn = null;
 		messageType = null;
 		pieceIndex = Integer.MIN_VALUE;
@@ -47,8 +47,8 @@ public class BroadCastingThread extends Thread {
 			pieceIndex = (int) data[2];
 			System.out.println(
 					"Broadcaster: Building " + messageType + pieceIndex + " to peer " + conn.getRemotePeerId());
-			int messageLength = messageManager.getMessageLength(messageType, pieceIndex);
-			byte[] payload = messageManager.getMessagePayload(messageType, pieceIndex);
+			int messageLength = MessageHandler.getInstance().getMessageLength(messageType, pieceIndex);
+			byte[] payload =  MessageHandler.getInstance().getMessagePayload(messageType, pieceIndex);
 			conn.sendMessage(messageLength, payload);
 			System.out.println("Broadcaster: Sending " + messageType + " to peer " + conn.getRemotePeerId());
 
