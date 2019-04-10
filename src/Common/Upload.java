@@ -34,7 +34,7 @@ public class Upload implements Runnable{
 					outStream.writeObject(new String(msgLen+""));
 					outStream.flush();
 					byte[] payload = uploadPayQue.take();
-					outStream.writeObject(payload.toString());
+					outStream.writeObject(new String(payload));
 					outStream.flush();
 				} catch (SocketException e) {
 					isAlive = false;
