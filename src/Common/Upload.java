@@ -34,7 +34,11 @@ public class Upload implements Runnable{
 					outStream.writeObject(new String(msgLen+""));
 					outStream.flush();
 					byte[] payload = uploadPayQue.take();
+<<<<<<< HEAD
 					outStream.writeObject(payload.toString());
+=======
+					outStream.writeObject(payload);
+>>>>>>> branch 'master' of https://github.com/comptotherescue/BitTorrent-CN-Project.git
 					outStream.flush();
 				} catch (SocketException e) {
 					isAlive = false;
