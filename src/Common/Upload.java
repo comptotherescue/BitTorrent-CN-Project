@@ -3,6 +3,7 @@ package Common;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,7 +14,7 @@ public class Upload implements Runnable{
 	protected LinkedBlockingQueue<Integer> uploadLenQue;
 	protected LinkedBlockingQueue<byte[]> uploadPayQue;
 	private Socket skt;
-	private DataOutputStream outStream;
+	private ObjectOutputStream outStream;
 	private boolean isAlive;
 	// This is for Client thread initialization
 		public Upload(Socket skt, int id, SharedData data) {
@@ -33,7 +34,7 @@ public class Upload implements Runnable{
 					outStream.writeInt(msgLen);
 					outStream.flush();
 					byte[] payload = uploadPayQue.take();
-					outStream.write(payload);
+					outStream.writeObject(payload);
 					outStream.flush();
 				} catch (SocketException e) {
 					isAlive = false;
@@ -59,7 +60,7 @@ public class Upload implements Runnable{
 			isAlive = true;
 			this.skt = clientSocket;
 			try {
-				outStream = new DataOutputStream(skt.getOutputStream());
+				outStream = new ObjectOutputStream(skt.getOutputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -3,12 +3,13 @@ package Common;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
 public class Download implements Runnable{
 	
-	private DataInputStream in;
+	private ObjectInputStream in;
 	private SharedData sharedData;
 	private Socket skt;
 	private boolean isAlive;
@@ -23,7 +24,7 @@ public class Download implements Runnable{
 			sharedData = data;
 			isAlive = true;
 			try {
-				in = new DataInputStream(skt.getInputStream());
+				in = new ObjectInputStream(skt.getInputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -37,7 +38,12 @@ public class Download implements Runnable{
 		
 		@Override
 		public void run() {
-			receiveMessage();
+			try {
+				receiveMessage();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		
@@ -49,16 +55,19 @@ public class Download implements Runnable{
 
 		
 
-		private void receiveMsgPayL(byte[] payload) {
+		private void receiveMsgPayL(byte[] payload) throws ClassNotFoundException {
 			receiveRawData(payload);
 		}
 
-		private void receiveRawData(byte[] message) {
+		private void receiveRawData(byte[] message) throws ClassNotFoundException {
 			try {
-				in.readFully(message);
+				String rcvString = (String) in.readObject();
+				message = rcvString.getBytes();
 			} catch (EOFException e) {
+				System.out.println("**************EXIT EOF****************");
 				System.exit(0);
 			} catch (IOException e) {
+				System.out.println("**************EXIT IN CATCH****************");
 				e.printStackTrace();
 			}
 		}
@@ -76,7 +85,7 @@ public class Download implements Runnable{
 			return len;
 		}
 		
-		protected void receiveMessage() {
+		protected void receiveMessage() throws ClassNotFoundException {
 			// System.out.println("Receive started");
 			while (isAlive()) {
 				System.out.println("Receive started");
