@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Handshake {
 	 private static final String HANDSHAKE_HEADER = "0000000000P2PFILESHARINGPROJ";
 	 private static String message = "";
-	 private static final int messageSize = 22;
+	 private static final int messageSize = 32;
 	
 	public static synchronized boolean verify(byte[] msg, int pId) {
 			String recvdMsg = new String(msg);
