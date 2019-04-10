@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Handshake {
-	 private static final String HANDSHAKE_HEADER = "P2PFILESHARINGPROJ";
+	 private static final String HANDSHAKE_HEADER = "0000000000P2PFILESHARINGPROJ";
 	 private static String message = "";
 	 private static final int messageSize = 22;
 	
