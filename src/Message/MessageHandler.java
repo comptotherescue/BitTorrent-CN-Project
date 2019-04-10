@@ -66,7 +66,7 @@ public class MessageHandler {
 			int payloadLength = 5 + SharedFile.getInstance().getPiece(pieceIndex).toString().length();
 			return payloadLength;
 		case HANDSHAKE:
-			return 22;
+			return 32;
 		}
 		return -1;
 	}
