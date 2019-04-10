@@ -47,8 +47,8 @@ public class BroadCastingThread extends Thread {
 			pieceIndex = (int) data[2];
 			System.out.println(
 					"Broadcaster: Building " + messageType + pieceIndex + " to peer " + conn.getRemotePeerId());
-			int messageLength = MessageHandler.getInstance().getMessageLength(messageType, pieceIndex);
-			byte[] payload =  MessageHandler.getInstance().getMessagePayload(messageType, pieceIndex);
+			int messageLength = messageHandler.getMessageLength(messageType, pieceIndex);
+			byte[] payload =  messageHandler.getMessagePayload(messageType, pieceIndex);
 			conn.sendMessage(messageLength, payload);
 			System.out.println("Broadcaster: Sending " + messageType + " to peer " + conn.getRemotePeerId());
 

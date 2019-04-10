@@ -11,7 +11,7 @@ public class MessageHandler {
 	private static MessageHandler messageHandler;
 	private SharedFile sharedFile;
 
-	private void MessageHandler() {
+	private MessageHandler() {
 		sharedFile = SharedFile.getInstance();
 	}
 
@@ -62,7 +62,7 @@ public class MessageHandler {
 			BitField bitfield = BitField.getInstance();
 			return bitfield.getMessageLength();
 		case PIECE:
-			System.out.println("Shared file" + SharedFile.getInstance().getPiece(pieceIndex) + " asking for piece " + pieceIndex);
+			System.out.println("Shared file" + sharedFile.getPiece(pieceIndex) + " asking for piece " + pieceIndex);
 			int payloadLength = 5 + SharedFile.getInstance().getPiece(pieceIndex).toString().length();
 			return payloadLength;
 		case HANDSHAKE:
