@@ -98,8 +98,8 @@ public class MessageHandler {
 			System.arraycopy(index, 0, payload, 1, 4);
 			break;
 		case PIECE:
-			String piece = SharedFile.getInstance().getPiece(pieceIndex).toString();
-			int pieceSize = piece.length();
+			byte[] piece = SharedFile.getInstance().getPiece(pieceIndex);
+			int pieceSize = piece.length;
 			int totalLength = 5 + pieceSize;
 			payload = new byte[totalLength];
 			payload[0] = 7;
