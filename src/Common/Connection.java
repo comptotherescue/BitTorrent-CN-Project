@@ -78,6 +78,11 @@ public class Connection {
 		connectionHandler.addInterestedConnection(remotePid, this);
 	}
 
+	
+	public synchronized void addNotInterestedConnection() {
+		connectionHandler.addNotInterestedConnection(remotePid, this);
+	}
+	
 	public void addBytesDownloaded(int length) {
 		// TODO Auto-generated method stub
 		bytesDownloaded += length;

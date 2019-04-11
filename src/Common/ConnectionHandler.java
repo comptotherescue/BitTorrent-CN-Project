@@ -113,7 +113,7 @@ public class ConnectionHandler {
 	/*
 	 * Remove from interested & add to not interested.
 	 */
-	public synchronized void addNotInterestedConnection(String peerId, Connection connection) {
+	public synchronized void addNotInterestedConnection(int peerID, Connection connection) {
 		notInterested.add(connection);
 		preferredNeighbors.remove(connection);
 	}

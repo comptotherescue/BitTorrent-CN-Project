@@ -155,7 +155,7 @@ public class SharedData extends Thread{
 		case NOTINTERESTED:
 			// add to not interested connections
 			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_RECEIVE_NOT_INTERESTED_MESSAGE);
-			conn.addInterestedConnection();
+			conn.addNotInterestedConnection();
 			responseMessageType = null;
 			break;
 		case HAVE:
