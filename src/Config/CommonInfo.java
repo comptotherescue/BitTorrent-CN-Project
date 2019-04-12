@@ -2,7 +2,6 @@
 package Config;
 
 import java.io.*;
-import java.io.File;
 import java.util.Properties;
 
 import Common.*;
@@ -15,6 +14,9 @@ public class CommonInfo {
 	  private static int sharedFilePieceSize;
 	  private static int numberofFilePieces;
 
+	  public CommonInfo() {
+		  loadCommonConfig();
+	  }
 	    public static int getNumberOfPreferredNeighbors() {
 	        return numberOfPreferredNeighbors;
 	    }

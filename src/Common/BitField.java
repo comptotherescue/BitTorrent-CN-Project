@@ -23,7 +23,6 @@ public class BitField extends Message {
 		BitSet filePieces = sharedFile.getFilePieces();
 		for (int i = 0; i < CommonInfo.getNumberOfPieces(); i++) {
 			if (filePieces.get(i)) {
-				// content[i] = 1;
 				b_payload[i + 1] = 1;
 			}
 		}

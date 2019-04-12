@@ -4,10 +4,8 @@ import Config.*;
 import Logger.GenerateLog;
 
 import java.io.IOException;
-import java.util.List;
 
 import Common.SharedFile;
-import Common.Constants;
 import Common.Handshake;
 
 public class PeerProcess {
@@ -17,18 +15,14 @@ public class PeerProcess {
 	}
 	/**
 	 * @param args
+	 * @throws IOException 
+	 * @throws SecurityException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SecurityException, IOException {
 		    Pid = Integer.parseInt(args[0]);
-		    try {
-				GenerateLog G = new GenerateLog(Pid);
-			} catch (SecurityException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	        CommonInfo info = new CommonInfo();
-	        CommonInfo.loadCommonConfig();
-	        PeerInfo peers = new PeerInfo(Constants.PeerInfoPath);
+		    new GenerateLog(Pid);
+	        new CommonInfo();
+	        new PeerInfo();
 	        Handshake.setID(Pid);
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
 				SharedFile.getInstance().splitFile();

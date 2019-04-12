@@ -13,7 +13,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import Common.Constants.Type;
 import Config.CommonInfo;
 import Logger.GenerateLog;
-import Peer.Peer;
 import Peer.PeerProcess;
 import Message.MessageHandler;
 

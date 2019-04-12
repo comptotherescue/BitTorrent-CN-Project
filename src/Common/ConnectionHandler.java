@@ -5,7 +5,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Timer;
@@ -17,9 +16,7 @@ import Logger.GenerateLog;
 public class ConnectionHandler {
 	private static ConnectionHandler connectionHandler;
 	private HashSet<Connection> allConnections;
-	 private HashMap<String, Connection> interested; // interested but choked
 	private HashSet<Connection> notInterested;
-	 private ArrayList<String> interestedPeerIds;
 	private PriorityQueue<Connection> preferredNeighbors;
 	public HashSet<Integer> peersWithFullFile = new HashSet<Integer>();
 	

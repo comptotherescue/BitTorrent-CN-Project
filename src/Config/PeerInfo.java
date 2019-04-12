@@ -4,11 +4,10 @@ import java.util.*;
 
 import Common.Constants;
 import Common.NetworkInfo;
-import Peer.Peer;
 
 public class PeerInfo {
 
-	  private static HashMap<Integer, NetworkInfo> peerMap;
+	  private static HashMap<Integer, NetworkInfo> peerMap = new LinkedHashMap<>();
 
 	    public static NetworkInfo getPeer(int id) {
 	        return peerMap.get(id);
@@ -22,8 +21,8 @@ public class PeerInfo {
 			return peerMap.size();
 		}
 
-	    public PeerInfo(String peerInfoConfigFile) {
-	        this.peerMap = new LinkedHashMap<>();
+	   static {
+	    
 	        int id = 1;
 	        Scanner sc = null;
 	        try {
