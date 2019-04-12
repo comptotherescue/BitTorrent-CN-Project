@@ -30,7 +30,6 @@ public class SharedData extends Thread{
 	private SharedFile sharedFile;
 	private BroadCastingThread broadcaster;
 	private boolean peerHasFile;
-	private Peer host = Peer.getInstance();
 	int i = 0;
 	private LinkedBlockingQueue<byte[]> payloadQueue;
 	private boolean isAlive;

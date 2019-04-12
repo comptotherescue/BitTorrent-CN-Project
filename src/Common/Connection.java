@@ -22,7 +22,7 @@ public class Connection {
 		this.peerSocket = socket;
 		sharedData = new SharedData(this);
 		upload = new Upload(socket, peerId, sharedData);
-		download = new Download(socket, peerId, sharedData);
+		download = new Download(socket, sharedData);
 		createThreads(upload, download);
 		GenerateLog.writeLog(peerId,Constants.LOG_TCP_CREATE_CONNECTION);
 		sharedData.sendHandshake();
