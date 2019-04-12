@@ -26,12 +26,12 @@ public class Handshake {
 		bb.get(handShanke);
 		return handShanke;
 	}
-	private static synchronized void init(String id) {
+	private static synchronized void init(int id) {
 		message += HANDSHAKE_HEADER + id;
 	}
 
 	public static synchronized void setID(int Id) {
-		init(id);
+		init(Id);
 	}
 	
 	public static synchronized int getRemotePId(byte[] byt) {

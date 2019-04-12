@@ -21,7 +21,7 @@ public class PeerProcess {
 	public static void main(String[] args) throws SecurityException, IOException {
 		    Pid = Integer.parseInt(args[0]);
 		    new GenerateLog(Pid);
-	        new CommonInfo();
+	        CommonInfo.loadCommonConfig();
 	        new PeerInfo();
 	        Handshake.setID(Pid);
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
