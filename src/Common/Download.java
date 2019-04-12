@@ -13,8 +13,7 @@ public class Download implements Runnable{
 	private Socket skt;
 	private boolean isAlive;
 	
-	    // This is for Client initialization
-		public Download(Socket skt, int peerId, SharedData data) {
+		public Download(Socket skt, SharedData data) {
 			init(skt, data);
 		}
 
@@ -28,11 +27,6 @@ public class Download implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-
-		// This is for Server initialization
-		public Download(Socket skt, SharedData data) {
-			init(skt, data);
 		}
 		
 		@Override
@@ -79,7 +73,7 @@ public class Download implements Runnable{
 		protected void receiveMessage() {
 			// System.out.println("Receive started");
 			while (isAlive()) {
-				System.out.println("Receive started");
+				//System.out.println("Receive started");
 				int messageLength = Integer.MIN_VALUE;
 				messageLength = receiveMsgLen();
 				if (!isAlive()) {
@@ -88,7 +82,7 @@ public class Download implements Runnable{
 				byte[] payL = new byte[messageLength];
 				receiveMsgPayL(payL);
 				sharedData.addPayload(payL);
-				System.out.println("Receive finished");
+				//System.out.println("Receive finished");
 			}
 
 		}

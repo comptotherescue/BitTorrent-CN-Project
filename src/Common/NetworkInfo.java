@@ -1,6 +1,7 @@
 package Common;
 
 public class NetworkInfo {
+	
 	private int num;
 	private int Pid;
 	private String hName;

@@ -11,7 +11,7 @@ public class Connection {
 	Upload upload;
 	Download download;
 	SharedData sharedData;
-	int bytesDownloaded;
+	double bytesDownloaded;
 	Socket peerSocket;
 	int remotePid;
 	boolean choked;
@@ -40,6 +40,7 @@ public class Connection {
 		sharedData.setUpload(upload);
 		sharedData.start();
 	}
+
 	public void createThreads(Upload upload, Download download) {
 		Thread uploadThread = new Thread(upload);
 		Thread downloadThread = new Thread(download);
@@ -47,12 +48,24 @@ public class Connection {
 		downloadThread.start();
 	}
 
-	public BitSet getPeerBitSet() {
+	public synchronized BitSet getPeerBitSet() {
 		// TODO Auto-generated method stub
 		return sharedData.getPeerBitSet();
 	}
 
-	public int getBytesDownloaded() {
+	protected Upload getUpload() {
+		return upload;
+	}
+	
+	public synchronized boolean isChoked() {
+		return choked;
+	}
+	
+	protected synchronized void addRequestedPiece(int pieceIndex) {
+		SharedFile.getInstance().addRequestedPiece(this, pieceIndex);
+	}
+	
+	public double getBytesDownloaded() {
 		// TODO Auto-generated method stub
 		return bytesDownloaded;
 	}
@@ -63,7 +76,7 @@ public class Connection {
 		
 	}
 
-	public boolean hasFile() {
+	public synchronized boolean hasFile() {
 		// TODO Auto-generated method stub
 		return sharedData.hasFile();
 	}
@@ -83,18 +96,18 @@ public class Connection {
 		connectionHandler.addNotInterestedConnection(remotePid, this);
 	}
 	
-	public void addBytesDownloaded(int length) {
+	public synchronized void addBytesDownloaded(long length) {
 		// TODO Auto-generated method stub
 		bytesDownloaded += length;
 		
 	}
 
-	public void tellAllNeighbors(int pieceIndex) {
+	public synchronized void tellAllNeighbors(int pieceIndex) {
 		// TODO Auto-generated method stub
 		connectionHandler.tellAllNeighbors(pieceIndex);
 	}
 
-	public void addAllConnections() {
+	public synchronized void addAllConnections() {
 		// TODO Auto-generated method stub
 		connectionHandler.addAllConnections(this);
 	}
@@ -104,7 +117,7 @@ public class Connection {
 		remotePid = remotePeerId;
 	}
 
-	public void removeRequestedPiece() {
+	public synchronized void removeRequestedPiece() {
 		// TODO Auto-generated method stub
 		SharedFile.getInstance().removeRequestedPiece(this);
 	}
@@ -118,8 +131,12 @@ public class Connection {
 			e.printStackTrace();
 		}
 	}
+	
+	public void receiveMessage() {
+		download.receiveMessage();
+	}
 
-	public void sendMessage(int messageLength, byte[] payload) {
+	public synchronized void sendMessage(int messageLength, byte[] payload) {
 		// TODO Auto-generated method stub
 		upload.addMessage(messageLength, payload);
 	}

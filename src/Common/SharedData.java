@@ -30,11 +30,12 @@ public class SharedData extends Thread{
 	private SharedFile sharedFile;
 	private BroadCastingThread broadcaster;
 	private boolean peerHasFile;
+	private Peer host = Peer.getInstance();
 	int i = 0;
 	private LinkedBlockingQueue<byte[]> payloadQueue;
 	private boolean isAlive;
 	Upload upload;
-
+	
 	public SharedData(Connection connection) {
 		conn = connection;
 		payloadQueue = new LinkedBlockingQueue<>();
@@ -107,7 +108,7 @@ public class SharedData extends Thread{
 
 	public synchronized void setPeerBitset(byte[] payload) {
 		for (int i = 1; i < payload.length; i++) {
-			 System.out.print(payload[i]);
+			// System.out.print(payload[i]);
 			if (payload[i] == 1) {
 				peerBitset.set(i - 1);
 			}
@@ -120,6 +121,7 @@ public class SharedData extends Thread{
 
 	public synchronized void updatePeerBitset(int index) {
 		peerBitset.set(index);
+		
 		if (peerBitset.cardinality() == CommonInfo.getNumberOfPieces()) {
 			ConnectionHandler.getInstance().addToPeersWithFullFile(remotePeerId);
 			peerHasFile = true;
@@ -169,11 +171,6 @@ public class SharedData extends Thread{
 			// update peer bitset
 			// send interested/not interested
 			setPeerBitset(payload);
-			try {
-				GenerateLog.writeLog(new String(payload, "UTF-8"));
-			 } catch (UnsupportedEncodingException e1) {
-			 e1.printStackTrace();
-			 }
 			responseMessageType = getInterestedNotInterested();
 			break;
 		case REQUEST:
@@ -184,7 +181,6 @@ public class SharedData extends Thread{
 			pieceIndex = ByteBuffer.wrap(content).getInt();
 			 System.out.println(pieceIndex);
 			if (pieceIndex == Integer.MIN_VALUE) {
-				System.out.println("received file");
 				responseMessageType = null;
 			}
 			break;
@@ -202,14 +198,13 @@ public class SharedData extends Thread{
 				messageType = null;
 				isAlive = false;
 				responseMessageType = null;
-				conn.close();
 			}
 			break;
 		case HANDSHAKE:
 			remotePeerId = Handshake.getRemotePId(payload);
 			conn.setPeerId(remotePeerId);
 			conn.addAllConnections();
-			System.out.println("Handshake: " + responseMessageType);
+			//System.out.println("Handshake: " + responseMessageType);
 			if (!getUploadHandshake()) {
 				setUploadHandshake();
 				GenerateLog.writeLog(remotePeerId,Constants.LOG_TCP_CREATE_CONNECTION);

@@ -26,15 +26,15 @@ public class Handshake {
 		bb.get(handShanke);
 		return handShanke;
 	}
-	
-	public static synchronized void setID(int Id)
-	{
-		message += HANDSHAKE_HEADER + Id;
+	private static synchronized void init(String id) {
+		message += HANDSHAKE_HEADER + id;
+	}
+
+	public static synchronized void setID(int Id) {
+		init(id);
 	}
 	
-
 	public static synchronized int getRemotePId(byte[] byt) {
-		String id = "";
 		int too = byt.length;
 		int fro = too - 4;
 		byte[] bytes = Arrays.copyOfRange(byt, fro, too);
