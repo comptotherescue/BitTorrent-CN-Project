@@ -22,7 +22,7 @@ public class PeerProcess {
 		    Pid = Integer.parseInt(args[0]);
 		    new GenerateLog(Pid);
 	        CommonInfo.loadCommonConfig();
-	        new PeerInfo();
+	        PeerInfo.loadPeerInfoConfig();
 	        Handshake.setID(Pid);
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
 				SharedFile.getInstance().splitFile();

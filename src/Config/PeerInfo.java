@@ -21,7 +21,7 @@ public class PeerInfo {
 			return peerMap.size();
 		}
 
-	   static {
+	    public static void loadPeerInfoConfig() {
 	    
 	        int id = 1;
 	        Scanner sc = null;
