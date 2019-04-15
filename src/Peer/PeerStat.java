@@ -6,6 +6,7 @@ package Peer;
 import java.util.HashMap;
 import java.util.Map;
 
+import Logger.GenerateLog;
 import Message.MessageHandler;
 
 /**
@@ -39,7 +40,7 @@ public class PeerStat {
 
 	public synchronized void printStat(){
 		for(Map.Entry<Integer, Integer> entry : peerStatMap.entrySet()) {
-			System.out.println("PID:"+entry.getValue()+":No. of pieces recieved:"+entry.getValue());
+			GenerateLog.writeLog(":Received From PID:"+entry.getValue()+":No. of pieces recieved:"+entry.getValue());
 		}
 	}
 
