@@ -33,7 +33,7 @@ public class PeerStat {
 	}
 	
 	public synchronized void addStat(int index){
-		int count = peerStatMap.get(index);
+		int count = peerStatMap.getOrDefault(index, 0);
 		peerStatMap.put(index,count+1);	
 	}
 
