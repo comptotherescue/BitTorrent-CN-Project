@@ -1,6 +1,7 @@
 package Common;
 
 import java.io.DataInputStream;
+import java.net.SocketException;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
@@ -41,8 +42,6 @@ public class Download implements Runnable{
 			return isAlive;
 		}
 
-		
-
 		private void receiveMsgPayL(byte[] payload) {
 			receiveRawData(payload);
 		}
@@ -52,6 +51,9 @@ public class Download implements Runnable{
 				in.readFully(message);
 			} catch (EOFException e) {
 				System.exit(0);
+			} catch (SocketException e) {
+				System.out.println("Socket has been reset i can't read" + e.getMessage());
+				isAlive = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -64,7 +66,7 @@ public class Download implements Runnable{
 				receiveRawData(msgLen);
 				len = ByteBuffer.wrap(msgLen).getInt();
 			} catch (Exception e) {
-				// isAlive = false;
+				//isAlive = false;
 				e.printStackTrace();
 			}
 			return len;
