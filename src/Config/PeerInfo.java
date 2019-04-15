@@ -4,6 +4,7 @@ import java.util.*;
 
 import Common.Constants;
 import Common.NetworkInfo;
+import Peer.PeerStat;
 
 public class PeerInfo {
 
@@ -37,11 +38,13 @@ public class PeerInfo {
 				NetworkInfo network = new NetworkInfo();
 				network.setNumber(id++);
 				network.setPeerId(Integer.parseInt(str[0]));
+				PeerStat.getInstance().addStat(network.getPeerId(), 0);
 				network.setHostName(str[1]);
 				network.setPort(Integer.parseInt(str[2]));
 				network.setHasSharedFile(str[3].equals("1") ? true : false);
 				peerMap.put(Integer.parseInt(str[0]), network);
 			}
+			PeerStat.getInstance().printStat();
 			sc.close();    
 	    }
 

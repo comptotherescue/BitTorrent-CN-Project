@@ -14,6 +14,7 @@ import Common.Constants.Type;
 import Config.CommonInfo;
 import Logger.GenerateLog;
 import Peer.PeerProcess;
+import Peer.PeerStat;
 import Message.MessageHandler;
 
 /**
@@ -188,11 +189,13 @@ public class SharedData extends Thread{
 			conn.addBytesDownloaded(payload.length);
 			sharedFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
 			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
+			PeerStat.getInstance().addStat(conn.getRemotePeerId());
 			responseMessageType = Type.REQUEST;
 			conn.tellAllNeighbors(pieceIndex);
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
 			if (pieceIndex == Integer.MIN_VALUE) {
 				GenerateLog.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
+				PeerStat.getInstance().printStat();
 				sharedFile.writeToFile(PeerProcess.getId());
 				messageType = null;
 				isAlive = false;
