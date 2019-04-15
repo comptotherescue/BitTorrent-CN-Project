@@ -40,7 +40,7 @@ public class PeerStat {
 
 	public synchronized void printStat(){
 		for(Map.Entry<Integer, Integer> entry : peerStatMap.entrySet()) {
-			GenerateLog.writeLog(":Received From PID:"+entry.getValue()+":No. of pieces recieved:"+entry.getValue());
+			GenerateLog.writeLog(":Received From PID:"+entry.getKey()+":No. of pieces recieved:"+entry.getValue());
 		}
 	}
 
