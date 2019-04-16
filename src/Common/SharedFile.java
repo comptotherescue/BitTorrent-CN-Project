@@ -150,7 +150,6 @@ public class SharedFile extends Thread{
 
 	protected synchronized int getRequestPieceIndex(Connection conn) {
 		if (isCompleteFile()) {
-			System.out.println("File received");
 			return Integer.MIN_VALUE;
 		}
 		BitSet peerBitset = conn.getPeerBitSet();

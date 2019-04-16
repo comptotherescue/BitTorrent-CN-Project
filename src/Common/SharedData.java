@@ -27,6 +27,7 @@ public class SharedData extends Thread{
 	private int remotePeerId;
 	private Connection conn;
 	private volatile boolean uploadHandshake;
+	private static boolean isComplete;
 	private volatile boolean isHandshakeDownloaded;
 	private SharedFile sharedFile;
 	private BroadCastingThread broadcaster;
@@ -40,6 +41,7 @@ public class SharedData extends Thread{
 		conn = connection;
 		payloadQueue = new LinkedBlockingQueue<>();
 		isAlive = true;
+		isComplete = false;
 		sharedFile = SharedFile.getInstance();
 		broadcaster = BroadCastingThread.getInstance();
 		peerBitset = new BitSet(CommonInfo.getNumberOfPieces());
@@ -194,8 +196,11 @@ public class SharedData extends Thread{
 			conn.tellAllNeighbors(pieceIndex);
 			pieceIndex = sharedFile.getRequestPieceIndex(conn);
 			if (pieceIndex == Integer.MIN_VALUE) {
-				GenerateLog.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
-				PeerStat.getInstance().printStat();
+				if(!isComplete) {
+					GenerateLog.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
+					PeerStat.getInstance().printStat();
+					isComplete = !isComplete;
+				}
 				sharedFile.writeToFile(PeerProcess.getId());
 				messageType = null;
 				isAlive = false;
