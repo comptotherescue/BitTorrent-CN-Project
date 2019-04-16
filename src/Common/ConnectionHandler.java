@@ -80,6 +80,7 @@ public class ConnectionHandler {
 							ncount++;
 						}
 					}
+					System.out.println("Count of active connections:"+ncount);
 					if(ncount == n-1) {
 						System.out.println("Exit in part 3 of choke");
 						System.exit(0);
