@@ -4,8 +4,10 @@ package Common;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,7 +27,7 @@ public class ConnectionHandler {
 	private int m = (int)CommonInfo.getOptimisticUnchokingInterval();
 	private int p = (int)CommonInfo.getUnchokingInterval();
 	private int n = PeerInfo.numberOfPeers();
-	private SharedFile sharedFile;
+	private CommonFile commonFile;
 	
 	private BroadCastingThread broadcaster;
 
@@ -38,7 +40,7 @@ public class ConnectionHandler {
 		preferredNeighbors = new PriorityQueue<>(k + 1,
 				(a, b) -> (int) a.getBytesDownloaded() - (int) b.getBytesDownloaded());
 		broadcaster = BroadCastingThread.getInstance();
-		sharedFile = SharedFile.getInstance();
+		commonFile = CommonFile.getInstance();
 		allConnections = new HashSet<>();
 		monitor();
 	}
@@ -48,20 +50,34 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
+				if (peersWithFullFile.size() == n - 1 && commonFile.isCompleteFile()) {
 					System.exit(0);
 				}
 				if (preferredNeighbors.size() > 1) {
 					Connection conn = preferredNeighbors.poll();
 					conn.setDownloadedbytes(0);
 					ArrayList<Integer> preferredNeighborsList = new ArrayList<Integer>();
-					for (Connection connT : preferredNeighbors) {
-						preferredNeighborsList.add(connT.remotePid);
-						connT.setDownloadedbytes(0);
-					}
 					broadcaster.addMessage(new Object[] { conn, Constants.Type.CHOKE, Integer.MIN_VALUE });
-				GenerateLog.writeLog(preferredNeighborsList, Constants.LOG_CHANGE_OF_PREFERREDNEIGHBORS);
+					conn.choked = true;
 					 System.out.println("Choking:" + conn.getRemotePeerId());
+					 for(Connection curConnection: allConnections) {
+						 if(!notInterested.contains(curConnection) && !preferredNeighbors.contains(curConnection) && preferredNeighbors.size() < CommonInfo.getNumberOfPreferredNeighbors()) {
+							 preferredNeighbors.add(curConnection);
+							 if(curConnection.isChoked()) {
+								 broadcaster.addMessage(new Object[] { curConnection, Constants.Type.UNCHOKE, Integer.MIN_VALUE });
+								 curConnection.choked = false;
+							 }
+						 } else if(!notInterested.contains(curConnection) && preferredNeighbors.size() == CommonInfo.getNumberOfPreferredNeighbors() && curConnection.getBytesDownloaded() > preferredNeighbors.peek().getBytesDownloaded() ) {
+							 Connection c = preferredNeighbors.poll();
+							 broadcaster.addMessage(new Object[] { c, Constants.Type.CHOKE, Integer.MIN_VALUE });
+							 preferredNeighbors.add(curConnection);
+							 if(curConnection.isChoked()) {
+								 broadcaster.addMessage(new Object[] { curConnection, Constants.Type.UNCHOKE, Integer.MIN_VALUE });
+								 curConnection.choked = false;
+							 }
+						 }
+						 
+					 }
 				}
 			}
 		}, new Date(), p * 1000);
@@ -69,11 +85,15 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				for (Connection conn : allConnections) {
+				List<Connection> array = new ArrayList<>(allConnections);
+				Collections.shuffle(array);
+				for (Connection conn : array) {
 					if (!notInterested.contains(conn) && !preferredNeighbors.contains(conn) && !conn.hasFile()) {
-					    broadcaster.addMessage(new Object[] { conn, Constants.Type.UNCHOKE, Integer.MIN_VALUE });
-						preferredNeighbors.add(conn);
-						GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
+						 broadcaster.addMessage(new Object[] { conn, Constants.Type.UNCHOKE, Integer.MIN_VALUE });
+						 GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_CHANGE_OPTIMISTICALLY_UNCHOKED_NEIGHBOR);
+						 if(preferredNeighbors.size() < CommonInfo.getNumberOfPreferredNeighbors()) {
+							 preferredNeighbors.add(conn);
+						 }
 					}
 				}
 			}
@@ -132,6 +152,9 @@ public class ConnectionHandler {
 		allConnections.add(connection);
 	}
 
+	public synchronized  PriorityQueue<Connection> getPreferredNeighbors() {
+		return preferredNeighbors;
+	}
 	public void addToPeersWithFullFile(int str) {
 		peersWithFullFile.add(str);
 	}

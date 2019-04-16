@@ -7,20 +7,20 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class Download implements Runnable{
+public class DownloadPiece implements Runnable{
 	
 	private DataInputStream in;
-	private SharedData sharedData;
+	private PeerSharedData peerSharedData;
 	private Socket skt;
 	private boolean isAlive;
 	
-		public Download(Socket skt, SharedData data) {
+		public DownloadPiece(Socket skt, PeerSharedData data) {
 			init(skt, data);
 		}
 
-		private void init(Socket skt, SharedData data) {
+		private void init(Socket skt, PeerSharedData data) {
 			this.skt = skt;
-			sharedData = data;
+			peerSharedData = data;
 			isAlive = true;
 			try {
 				in = new DataInputStream(skt.getInputStream());
@@ -83,7 +83,7 @@ public class Download implements Runnable{
 				}
 				byte[] payL = new byte[messageLength];
 				receiveMsgPayL(payL);
-				sharedData.addPayload(payL);
+				peerSharedData.addPayload(payL);
 				//System.out.println("Receive finished");
 			}
 

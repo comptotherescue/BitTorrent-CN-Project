@@ -2,17 +2,17 @@ package Message;
 
 import java.nio.ByteBuffer;
 
-import Common.BitField;
+import Common.PeerBitField;
 import Common.Handshake;
-import Common.SharedFile;
+import Common.CommonFile;
 import Common.Constants.Type;
 
 public class MessageHandler {
 	private static MessageHandler messageHandler;
-	private SharedFile sharedFile;
+	private CommonFile commonFile;
 
 	private MessageHandler() {
-		sharedFile = SharedFile.getInstance();
+		commonFile = CommonFile.getInstance();
 	}
 
 	public static synchronized MessageHandler getInstance() {
@@ -59,11 +59,11 @@ public class MessageHandler {
 		case HAVE:
 			return 5;
 		case BITFIELD:
-			BitField bitfield = BitField.getInstance();
+			PeerBitField bitfield = PeerBitField.getInstance();
 			return bitfield.getMessageLength();
 		case PIECE:
-			System.out.println("Shared file" + sharedFile.getPiece(pieceIndex) + " asking for piece " + pieceIndex);
-			int payloadLength = 5 + SharedFile.getInstance().getPiece(pieceIndex).length;
+			System.out.println("Shared file" + commonFile.getPiece(pieceIndex) + " asking for piece " + pieceIndex);
+			int payloadLength = 5 + CommonFile.getInstance().getPiece(pieceIndex).length;
 			return payloadLength;
 		case HANDSHAKE:
 			return 32;
@@ -89,7 +89,7 @@ public class MessageHandler {
 			System.arraycopy(havePieceIndex, 0, payload, 1, 4);
 			break;
 		case BITFIELD:
-			BitField bitfield = BitField.getInstance();
+			PeerBitField bitfield = PeerBitField.getInstance();
 			payload = bitfield.getPayload();
 			break;
 		case REQUEST:
@@ -98,7 +98,7 @@ public class MessageHandler {
 			System.arraycopy(index, 0, payload, 1, 4);
 			break;
 		case PIECE:
-			byte[] piece = SharedFile.getInstance().getPiece(pieceIndex);
+			byte[] piece = CommonFile.getInstance().getPiece(pieceIndex);
 			int pieceSize = piece.length;
 			int totalLength = 5 + pieceSize;
 			payload = new byte[totalLength];

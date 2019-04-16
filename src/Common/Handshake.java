@@ -9,11 +9,6 @@ public class Handshake {
 	 private static String message = "";
 	 private static final int messageSize = 32;
 	
-	public static synchronized boolean verify(byte[] msg, int pId) {
-			String recvdMsg = new String(msg);
-			return recvdMsg.indexOf(pId) != -1 && recvdMsg.contains(HANDSHAKE_HEADER);
-		}
-
 	public static synchronized int getPid(byte[] msg) {
 		byte[] remotePId = Arrays.copyOfRange(msg, msg.length - 4, msg.length);
 		return Integer.parseInt(new String(remotePId));

@@ -21,7 +21,7 @@ import Message.MessageHandler;
  * @author sonal
  *
  */
-public class SharedData extends Thread{
+public class PeerSharedData extends Thread{
 	private volatile boolean bitfieldSent;
 	private BitSet peerBitset;
 	private int remotePeerId;
@@ -29,26 +29,26 @@ public class SharedData extends Thread{
 	private volatile boolean uploadHandshake;
 	private static boolean isComplete;
 	private volatile boolean isHandshakeDownloaded;
-	private SharedFile sharedFile;
+	private CommonFile commonFile;
 	private BroadCastingThread broadcaster;
 	private boolean peerHasFile;
 	int i = 0;
 	private LinkedBlockingQueue<byte[]> payloadQueue;
 	private boolean isAlive;
-	Upload upload;
+	UploadPiece uploadPiece;
 	
-	public SharedData(Connection connection) {
+	public PeerSharedData(Connection connection) {
 		conn = connection;
 		payloadQueue = new LinkedBlockingQueue<>();
 		isAlive = true;
 		isComplete = false;
-		sharedFile = SharedFile.getInstance();
+		commonFile = CommonFile.getInstance();
 		broadcaster = BroadCastingThread.getInstance();
 		peerBitset = new BitSet(CommonInfo.getNumberOfPieces());
 	}
 
-	public void setUpload(Upload value) {
-		upload = value;
+	public void setUpload(UploadPiece value) {
+		uploadPiece = value;
 		if (getUploadHandshake()) {
 			broadcaster.addMessage(new Object[] { conn, Constants.Type.HANDSHAKE, Integer.MIN_VALUE });
 		}
@@ -147,7 +147,7 @@ public class SharedData extends Thread{
 			// respond with request
 			GenerateLog.writeLog(conn.getRemotePeerId(),Constants.LOG_UNCHOKING);
 			responseMessageType = Type.REQUEST;
-			pieceIndex = sharedFile.getRequestPieceIndex(conn);
+			pieceIndex = commonFile.getRequestPieceIndex(conn);
 			break;
 		case INTERESTED:
 			// add to interested connections
@@ -182,26 +182,30 @@ public class SharedData extends Thread{
 			System.arraycopy(payload, 1, content, 0, 4);
 			pieceIndex = ByteBuffer.wrap(content).getInt();
 			 System.out.println(pieceIndex);
+			 if(!ConnectionHandler.getInstance().getPreferredNeighbors().contains(getRemotePeerId())) {
+				 conn.addInterestedConnection();
+			 }
 			if (pieceIndex == Integer.MIN_VALUE) {
 				responseMessageType = null;
+				checkIfPeerHasCompleteFile();
 			}
 			break;
 		case PIECE:
 			pieceIndex = ByteBuffer.wrap(payload, 1, 4).getInt();
 			conn.addBytesDownloaded(payload.length);
-			sharedFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
-			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, sharedFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
+			commonFile.setPiece(Arrays.copyOfRange(payload, 1, payload.length));
+			GenerateLog.writeLog(conn.getRemotePeerId(),pieceIndex, commonFile.getReceivedFileSize(),Constants.LOG_DOWNLOAD_PEICE);
 			PeerStat.getInstance().addStat(conn.getRemotePeerId());
 			responseMessageType = Type.REQUEST;
 			conn.tellAllNeighbors(pieceIndex);
-			pieceIndex = sharedFile.getRequestPieceIndex(conn);
+			pieceIndex = commonFile.getRequestPieceIndex(conn);
 			if (pieceIndex == Integer.MIN_VALUE) {
 				if(!isComplete) {
 					GenerateLog.writeLog(Constants.LOG_DOWNLOAD_COMPLETE);
 					PeerStat.getInstance().printStat();
 					isComplete = !isComplete;
 				}
-				sharedFile.writeToFile(PeerProcess.getId());
+				commonFile.writeToFile(PeerProcess.getId());
 				messageType = null;
 				isAlive = false;
 				responseMessageType = null;
@@ -218,7 +222,7 @@ public class SharedData extends Thread{
 			 	broadcaster.addMessage(new Object[] { conn, Constants.Type.HANDSHAKE, Integer.MIN_VALUE });
 				System.out.println("Added " + messageType + " to broadcaster");
 			}
-			if (sharedFile.hasAnyPieces()) {
+			if (commonFile.hasAnyPieces()) {
 				responseMessageType = Type.BITFIELD;
 			}
 			System.out.println("Response Message Type: " + responseMessageType);
@@ -233,7 +237,7 @@ public class SharedData extends Thread{
 
 	private boolean isInterested() {
 		for (int i = 0; i < CommonInfo.getNumberOfPieces(); i++) {
-			if (peerBitset.get(i) && !sharedFile.isPieceAvailable(i)) {
+			if (peerBitset.get(i) && !commonFile.isPieceAvailable(i)) {
 				return true;
 			}
 		}
@@ -267,7 +271,13 @@ public class SharedData extends Thread{
 	private void setHandshakeDownloaded() {
 		isHandshakeDownloaded = true;
 	}
-
+	
+	private synchronized void checkIfPeerHasCompleteFile() {
+		if (peerBitset.cardinality() == CommonInfo.getNumberOfPieces()) {
+			ConnectionHandler.getInstance().addToPeersWithFullFile(remotePeerId);
+			peerHasFile = true;
+		}
+	} 
 	public String getTime() {
 		return Calendar.getInstance().getTime() + ": ";
 	}
