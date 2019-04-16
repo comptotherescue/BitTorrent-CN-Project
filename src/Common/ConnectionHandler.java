@@ -71,6 +71,17 @@ public class ConnectionHandler {
 				{
 					System.exit(0);
 				}
+				else {
+					int ncount=0;
+					for(Connection conn : allConnections) {
+						if(conn.peerSocket.isClosed()) {
+							ncount++;
+						}
+					}
+					if(ncount == n-1) {
+						System.exit(0);
+					}
+				}
 			}
 		}, new Date(), p * 1000);
 
