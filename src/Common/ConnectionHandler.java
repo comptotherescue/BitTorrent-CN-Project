@@ -48,6 +48,7 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
+				System.out.println("*******************Peers with full size************************"+peersWithFullFile.size());
 				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
 					System.exit(0);
 				}
@@ -69,6 +70,9 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
+				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
+					System.exit(0);
+				}
 				for (Connection conn : allConnections) {
 					if (!notInterested.contains(conn) && !preferredNeighbors.contains(conn) && !conn.hasFile()) {
 					    broadcaster.addMessage(new Object[] { conn, Constants.Type.UNCHOKE, Integer.MIN_VALUE });
