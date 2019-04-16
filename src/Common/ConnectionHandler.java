@@ -81,7 +81,7 @@ public class ConnectionHandler {
 						}
 					}
 					System.out.println("Count of active connections:"+ncount);
-					if(ncount == n-1) {
+					if(ncount == 0) {
 						System.out.println("Exit in part 3 of choke");
 						System.exit(0);
 					}
