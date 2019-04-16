@@ -48,8 +48,10 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println("*******************Peers with full size************************"+peersWithFullFile.size()+"****All Connections****"+allConnections.toString());
-				
+				System.out.println("*******************Peers with full size************************"+peersWithFullFile.size()+"****All Connections****[");
+				for(Connection c : allConnections) {
+					System.out.println(","+c.remotePid);
+				}
 				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
 					System.exit(0);
 				}
@@ -64,6 +66,10 @@ public class ConnectionHandler {
 					broadcaster.addMessage(new Object[] { conn, Constants.Type.CHOKE, Integer.MIN_VALUE });
 				GenerateLog.writeLog(preferredNeighborsList, Constants.LOG_CHANGE_OF_PREFERREDNEIGHBORS);
 					 System.out.println("Choking:" + conn.getRemotePeerId());
+				}
+				else if(preferredNeighbors.size() == 1 && preferredNeighbors.peek().hasFile() && sharedFile.isCompleteFile())
+				{
+					System.exit(0);
 				}
 			}
 		}, new Date(), p * 1000);
