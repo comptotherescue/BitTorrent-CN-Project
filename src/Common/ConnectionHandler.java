@@ -53,6 +53,7 @@ public class ConnectionHandler {
 					System.out.println(","+c.remotePid);
 				}
 				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
+					System.out.println("Exit in choke");
 					System.exit(0);
 				}
 				if (preferredNeighbors.size() > 1) {
@@ -69,6 +70,7 @@ public class ConnectionHandler {
 				}
 				else if(preferredNeighbors.size() == 1 && preferredNeighbors.peek().hasFile() && sharedFile.isCompleteFile())
 				{
+					System.out.println("Exit in part 2 of choke");
 					System.exit(0);
 				}
 				else {
@@ -79,6 +81,7 @@ public class ConnectionHandler {
 						}
 					}
 					if(ncount == n-1) {
+						System.out.println("Exit in part 3 of choke");
 						System.exit(0);
 					}
 				}
@@ -89,6 +92,7 @@ public class ConnectionHandler {
 			@Override
 			public void run() {
 				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
+					System.out.println("Exit in optimistic of choke");
 					System.exit(0);
 				}
 				for (Connection conn : allConnections) {
