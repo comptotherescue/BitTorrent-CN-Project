@@ -48,7 +48,8 @@ public class ConnectionHandler {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println("*******************Peers with full size************************"+peersWithFullFile.size());
+				System.out.println("*******************Peers with full size************************"+peersWithFullFile.size()+"****All Connections****"+allConnections.toString());
+				
 				if (peersWithFullFile.size() == n - 1 && sharedFile.isCompleteFile()) {
 					System.exit(0);
 				}
