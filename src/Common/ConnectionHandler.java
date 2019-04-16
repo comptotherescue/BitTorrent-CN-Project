@@ -79,12 +79,14 @@ public class ConnectionHandler {
 						if(conn.peerSocket.isClosed()) {
 							ncount++;
 						}
+						
+						if(ncount == 0) {
+							System.out.println("Exit in part 3 of choke");
+							System.exit(0);
+						}
 					}
 					System.out.println("Count of active connections:"+ncount);
-					if(ncount == 0) {
-						System.out.println("Exit in part 3 of choke");
-						System.exit(0);
-					}
+					
 				}
 			}
 		}, new Date(), p * 1000);
