@@ -50,6 +50,7 @@ public class Download implements Runnable{
 			try {
 				in.readFully(message);
 			} catch (EOFException e) {
+				System.out.print("I exited here: after download option");
 				System.exit(0);
 			} catch (SocketException e) {
 				System.out.println("Socket has been reset i can't read" + e.getMessage());
