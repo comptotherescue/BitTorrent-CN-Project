@@ -21,7 +21,7 @@ public class NetworkInfo {
 	}
 
 	public void setPeerId(int peerId) {
-		this.Pid = peerId;
+		this.Pid = Pid;
 	}
 
 	public String getHostName() {

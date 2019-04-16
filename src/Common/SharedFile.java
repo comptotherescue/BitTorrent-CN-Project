@@ -19,14 +19,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import Config.CommonInfo;
 import Peer.PeerProcess;
 
-public class CommonFile extends Thread{
+public class SharedFile extends Thread{
 	private volatile HashMap<Connection, Integer> requestedPiecesMap;
 	private static ConcurrentHashMap<Integer, byte[]> filemap;
 	private static FileChannel writeFileChannel;
 	private LinkedBlockingQueue<byte[]> fileQueue;
-	private static CommonFile commonFile;
+	private static SharedFile sharedFile;
 	private volatile static BitSet filePieces;
-	private CommonFile() {
+	private SharedFile() {
 		fileQueue = new LinkedBlockingQueue<>();
 		requestedPiecesMap = new HashMap<>();
 	}
@@ -183,13 +183,13 @@ public class CommonFile extends Thread{
 	public synchronized void removeRequestedPiece(Connection connection) {
 		requestedPiecesMap.remove(connection);
 	}
-	public static CommonFile getInstance() {
+	public static SharedFile getInstance() {
 		// TODO Auto-generated method stub
-		if (commonFile == null) {
-			commonFile = new CommonFile();
-			commonFile.start();
+		if (sharedFile == null) {
+			sharedFile = new SharedFile();
+			sharedFile.start();
 		}
-		return commonFile;
+		return sharedFile;
 	}
 
 	

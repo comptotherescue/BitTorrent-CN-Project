@@ -77,7 +77,6 @@ public class CommonInfo {
 	    
 	    public static void loadCommonConfig() { //TODO: Handle this
 	    	Properties properties = new Properties();
-	    	ConfigurationException configExp = new ConfigurationException(Constants.ConfigPath);
 	    	try {
 				FileInputStream fin = new FileInputStream(Constants.ConfigPath);
 				properties.load(fin);
@@ -89,10 +88,10 @@ public class CommonInfo {
 				setNumberOfPreferredNeighbors(Integer.parseInt(properties.get(Constants.NumofPreferredNeighbors).toString()));
 				calculateNumberOfPieces();
 	    	} catch (FileNotFoundException e) {
-	    		System.out.println(configExp.toString());
-	    		e.printStackTrace();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println(configExp.toString());
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    }

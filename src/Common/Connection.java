@@ -8,9 +8,9 @@ import java.util.BitSet;
 import Logger.GenerateLog;
 
 public class Connection {
-	UploadPiece uploadPiece;
-	DownloadPiece downloadPiece;
-	PeerSharedData peerSharedData;
+	Upload upload;
+	Download download;
+	SharedData sharedData;
 	double bytesDownloaded;
 	Socket peerSocket;
 	int remotePid;
@@ -20,41 +20,41 @@ public class Connection {
 	public Connection(Socket socket, int peerId) {
 		// TODO Auto-generated constructor stub
 		this.peerSocket = socket;
-		peerSharedData = new PeerSharedData(this);
-		uploadPiece = new UploadPiece(socket, peerId, peerSharedData);
-		downloadPiece = new DownloadPiece(socket, peerSharedData);
-		createThreads(uploadPiece, downloadPiece);
+		sharedData = new SharedData(this);
+		upload = new Upload(socket, peerId, sharedData);
+		download = new Download(socket, sharedData);
+		createThreads(upload, download);
 		GenerateLog.writeLog(peerId,Constants.LOG_TCP_CREATE_CONNECTION);
-		peerSharedData.sendHandshake();
-		peerSharedData.setUpload(uploadPiece);
-		peerSharedData.start();
+		sharedData.sendHandshake();
+		sharedData.setUpload(upload);
+		sharedData.start();
 	}
 
 	public Connection(Socket socket) {
 		// TODO Auto-generated constructor stub
 		this.peerSocket = socket;
-		peerSharedData = new PeerSharedData(this);
-		uploadPiece = new UploadPiece(socket, peerSharedData);
-		downloadPiece = new DownloadPiece(socket, peerSharedData);
-		createThreads(uploadPiece, downloadPiece);
-		peerSharedData.setUpload(uploadPiece);
-		peerSharedData.start();
+		sharedData = new SharedData(this);
+		upload = new Upload(socket, sharedData);
+		download = new Download(socket, sharedData);
+		createThreads(upload, download);
+		sharedData.setUpload(upload);
+		sharedData.start();
 	}
 
-	public void createThreads(UploadPiece uploadPiece, DownloadPiece downloadPiece) {
-		Thread uploadThread = new Thread(uploadPiece);
-		Thread downloadThread = new Thread(downloadPiece);
+	public void createThreads(Upload upload, Download download) {
+		Thread uploadThread = new Thread(upload);
+		Thread downloadThread = new Thread(download);
 		uploadThread.start();
 		downloadThread.start();
 	}
 
 	public synchronized BitSet getPeerBitSet() {
 		// TODO Auto-generated method stub
-		return peerSharedData.getPeerBitSet();
+		return sharedData.getPeerBitSet();
 	}
 
-	protected UploadPiece getUpload() {
-		return uploadPiece;
+	protected Upload getUpload() {
+		return upload;
 	}
 	
 	public synchronized boolean isChoked() {
@@ -62,7 +62,7 @@ public class Connection {
 	}
 	
 	protected synchronized void addRequestedPiece(int pieceIndex) {
-		CommonFile.getInstance().addRequestedPiece(this, pieceIndex);
+		SharedFile.getInstance().addRequestedPiece(this, pieceIndex);
 	}
 	
 	public double getBytesDownloaded() {
@@ -78,7 +78,7 @@ public class Connection {
 
 	public synchronized boolean hasFile() {
 		// TODO Auto-generated method stub
-		return peerSharedData.hasFile();
+		return sharedData.hasFile();
 	}
 
 	public synchronized int getRemotePeerId() {
@@ -119,7 +119,7 @@ public class Connection {
 
 	public synchronized void removeRequestedPiece() {
 		// TODO Auto-generated method stub
-		CommonFile.getInstance().removeRequestedPiece(this);
+		SharedFile.getInstance().removeRequestedPiece(this);
 	}
 
 	public void close() {
@@ -133,12 +133,12 @@ public class Connection {
 	}
 	
 	public void receiveMessage() {
-		downloadPiece.receiveMessage();
+		download.receiveMessage();
 	}
 
 	public synchronized void sendMessage(int messageLength, byte[] payload) {
 		// TODO Auto-generated method stub
-		uploadPiece.addMessage(messageLength, payload);
+		upload.addMessage(messageLength, payload);
 	}
 
 }
