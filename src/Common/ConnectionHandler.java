@@ -73,21 +73,21 @@ public class ConnectionHandler {
 					System.out.println("Exit in part 2 of choke");
 					System.exit(0);
 				}
-				else {
-					int ncount=0;
-					for(Connection conn : allConnections) {
-						if(conn.peerSocket.isClosed()) {
-							ncount++;
-						}
-						
-						if(ncount == n-1) {
-							System.out.println("Exit in part 3 of choke");
-							System.exit(0);
-						}
-					}
-					System.out.println("Count of active connections:"+ncount);
-					
-				}
+//				else {
+//					int ncount=0;
+//					for(Connection conn : allConnections) {
+//						if(conn.peerSocket.isClosed()) {
+//							ncount++;
+//						}
+//						
+//						if(ncount == n-1) {
+//							System.out.println("Exit in part 3 of choke");
+//							System.exit(0);
+//						}
+//					}
+//					System.out.println("Count of active connections:"+ncount);
+//					
+//				}
 			}
 		}, new Date(), p * 1000);
 
