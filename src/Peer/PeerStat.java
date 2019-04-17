@@ -35,7 +35,11 @@ public class PeerStat {
 	
 	public synchronized void addStat(int index){
 		int count = peerStatMap.getOrDefault(index, 0);
-		peerStatMap.put(index,count+1);	
+		if(peerStatMap.containsKey(index)) {
+			peerStatMap.put(index,count+1);
+		} else {
+			peerStatMap.put(index,count);
+		}	
 	}
 
 	public synchronized void printStat(){
