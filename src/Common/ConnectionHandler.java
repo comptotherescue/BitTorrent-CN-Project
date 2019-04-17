@@ -56,7 +56,7 @@ public class ConnectionHandler {
 					System.out.println("Exit in choke");
 					System.exit(0);
 				}
-				if (preferredNeighbors.size() > 1) {
+				if (preferredNeighbors.size() >= 1) {
 					Connection conn = preferredNeighbors.poll();
 					conn.setDownloadedbytes(0);
 					ArrayList<Integer> preferredNeighborsList = new ArrayList<Integer>();
@@ -68,7 +68,7 @@ public class ConnectionHandler {
 				GenerateLog.writeLog(preferredNeighborsList, Constants.LOG_CHANGE_OF_PREFERREDNEIGHBORS);
 					 System.out.println("Choking:" + conn.getRemotePeerId());
 				}
-				else if(preferredNeighbors.size() == 1 && preferredNeighbors.peek().hasFile() && sharedFile.isCompleteFile())
+				else if(preferredNeighbors.size() == 0 && sharedFile.isCompleteFile() && allConnections.size()>0)
 				{
 					System.out.println("Exit in part 2 of choke");
 					System.exit(0);
