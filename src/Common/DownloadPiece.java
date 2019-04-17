@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class Download implements Runnable{
+public class DownloadPiece implements Runnable{
 	
 	private DataInputStream in;
 	private SharedData sharedData;
 	private Socket skt;
 	private boolean isAlive;
 	
-		public Download(Socket skt, SharedData data) {
+		public DownloadPiece(Socket skt, SharedData data) {
 			init(skt, data);
 		}
 
@@ -50,10 +50,8 @@ public class Download implements Runnable{
 			try {
 				in.readFully(message);
 			} catch (EOFException e) {
-				System.out.print("I exited here: after download option");
 				System.exit(0);
 			} catch (SocketException e) {
-				System.out.println("Socket has been reset i can't read" + e.getMessage());
 				isAlive = false;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -74,9 +72,7 @@ public class Download implements Runnable{
 		}
 		
 		protected void receiveMessage() {
-			// System.out.println("Receive started");
 			while (isAlive()) {
-				//System.out.println("Receive started");
 				int messageLength = Integer.MIN_VALUE;
 				messageLength = receiveMsgLen();
 				if (!isAlive()) {
@@ -87,6 +83,5 @@ public class Download implements Runnable{
 				sharedData.addPayload(payL);
 				//System.out.println("Receive finished");
 			}
-
 		}
 }

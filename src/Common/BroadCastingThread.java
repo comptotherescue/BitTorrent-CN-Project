@@ -6,38 +6,21 @@ import Message.MessageHandler;
 
 public class BroadCastingThread extends Thread {
 	
-	private MessageHandler messageHandler;
 	private Connection conn;
+	private MessageHandler messageHandler;
+	private LinkedBlockingQueue<Object[]> broadCastQueue;
+	private static BroadCastingThread broadcaster;
 	private Constants.Type messageType;
 	private int pieceIndex;
-	private LinkedBlockingQueue<Object[]> que;
-	private static BroadCastingThread broadcaster;
-
+	
 	private BroadCastingThread() {
-		que = new LinkedBlockingQueue<>();
+		broadCastQueue = new LinkedBlockingQueue<>();
 		messageHandler = MessageHandler.getInstance();
 		conn = null;
 		messageType = null;
 		pieceIndex = Integer.MIN_VALUE;
 	}
-
-	protected static synchronized BroadCastingThread getInstance() {
-		if (broadcaster == null) {
-			broadcaster = new BroadCastingThread();
-			broadcaster.start();
-		}
-		return broadcaster;
-	}
-
-	protected synchronized void addMessage(Object[] data) {
-		try {
-			que.put(data);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	
 	@Override
 	public void run() {
 		while (true) {
@@ -54,16 +37,35 @@ public class BroadCastingThread extends Thread {
 
 		}
 	}
-
+	
 	private Object[] retrieveMessage() {
 		Object[] data = null;
 		try {
-			data = que.take();
+			data = broadCastQueue.take();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return data;
 	}
+
+	protected static synchronized BroadCastingThread getInstance() {
+		if (broadcaster == null) {
+			broadcaster = new BroadCastingThread();
+			broadcaster.start();
+		}
+		return broadcaster;
+	}
+
+	protected synchronized void addMessage(Object[] data) {
+		try {
+			broadCastQueue.put(data);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
 
 }

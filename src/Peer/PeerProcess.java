@@ -5,7 +5,7 @@ import Logger.GenerateLog;
 
 import java.io.IOException;
 
-import Common.SharedFile;
+import Common.CommonFile;
 import Common.Handshake;
 
 public class PeerProcess {
@@ -25,7 +25,7 @@ public class PeerProcess {
 	        PeerInfo.loadPeerInfoConfig();
 	        Handshake.setID(Pid);
 	        if (PeerInfo.getPeer(Pid).hasSharedFile()) {
-				SharedFile.getInstance().splitFile();
+				CommonFile.getInstance().splitFile();
 			}
 	        Peer current = Peer.getInstance();
 	        current.createTCPConnections();

@@ -19,14 +19,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import Config.CommonInfo;
 import Peer.PeerProcess;
 
-public class SharedFile extends Thread{
+public class CommonFile extends Thread{
 	private volatile HashMap<Connection, Integer> requestedPiecesMap;
 	private static ConcurrentHashMap<Integer, byte[]> filemap;
 	private static FileChannel writeFileChannel;
 	private LinkedBlockingQueue<byte[]> fileQueue;
-	private static SharedFile sharedFile;
+	private static CommonFile commonFile;
 	private volatile static BitSet filePieces;
-	private SharedFile() {
+	private CommonFile() {
 		fileQueue = new LinkedBlockingQueue<>();
 		requestedPiecesMap = new HashMap<>();
 	}
@@ -35,7 +35,7 @@ public class SharedFile extends Thread{
 		filemap = new ConcurrentHashMap<Integer, byte[]>();
 		filePieces = new BitSet(CommonInfo.getNumberOfPieces());
 		try {
-			File createdFile = new File(Constants.COMMON_PROPERTIES_CREATED_FILE_PATH + PeerProcess.getId() + File.separatorChar + CommonInfo.getSharedFileName());
+			File createdFile = new File(Constants.COMMON_PROPERTIES_CREATED_FILE_PATH + PeerProcess.getId() + File.separatorChar + CommonInfo.gettargetFileName());
 			createdFile.getParentFile().mkdirs(); // Will create parent directories if not exists
 			createdFile.createNewFile();
 			writeFileChannel = FileChannel.open(createdFile.toPath(), StandardOpenOption.WRITE);
@@ -46,7 +46,7 @@ public class SharedFile extends Thread{
 	}
 
 	public void splitFile() {
-		File filePtr = new File(Constants.COMMON_PROPERTIES_FILE_PATH + CommonInfo.getSharedFileName());
+		File filePtr = new File(Constants.COMMON_PROPERTIES_FILE_PATH + CommonInfo.gettargetFileName());
 		FileInputStream fis = null;
 		DataInputStream dis = null;
 		int fileSize = (int) CommonInfo.getSharedFileSize();
@@ -119,7 +119,7 @@ public class SharedFile extends Thread{
 
 	public synchronized void writeToFile(int peerId) {
 		String filename = Constants.COMMON_PROPERTIES_CREATED_FILE_PATH + peerId + File.separatorChar
-				+ CommonInfo.getSharedFileName();
+				+ CommonInfo.gettargetFileName();
 		System.out.println(filename);
 		FileOutputStream fos = null;
 		try {
@@ -183,13 +183,13 @@ public class SharedFile extends Thread{
 	public synchronized void removeRequestedPiece(Connection connection) {
 		requestedPiecesMap.remove(connection);
 	}
-	public static SharedFile getInstance() {
+	public static CommonFile getInstance() {
 		// TODO Auto-generated method stub
-		if (sharedFile == null) {
-			sharedFile = new SharedFile();
-			sharedFile.start();
+		if (commonFile == null) {
+			commonFile = new CommonFile();
+			commonFile.start();
 		}
-		return sharedFile;
+		return commonFile;
 	}
 
 	

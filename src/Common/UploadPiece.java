@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Upload implements Runnable{
+public class UploadPiece implements Runnable{
 
 	
 	protected LinkedBlockingQueue<Integer> uploadLenQue;
@@ -15,13 +15,9 @@ public class Upload implements Runnable{
 	private Socket skt;
 	private DataOutputStream outStream;
 	private boolean isAlive;
-	// This is for Client thread initialization
-		public Upload(Socket skt, int id, SharedData data) {
-			init(skt, data);
-		}
-
-		// This is for Server thread initialization
-		public Upload(Socket skt, SharedData data) {
+	
+		// This is for thread initialization
+		public UploadPiece(Socket skt, SharedData data) {
 			init(skt, data);
 		}
 
@@ -43,7 +39,7 @@ public class Upload implements Runnable{
 			}
 		}
 		
-		public void addMessage(int length, byte[] payload) {
+		public void addUploadPieceToQueue(int length, byte[] payload) {
 			try {
 				uploadLenQue.put(length);
 				uploadPayQue.put(payload);
